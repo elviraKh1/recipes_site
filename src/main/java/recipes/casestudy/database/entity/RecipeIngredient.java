@@ -14,12 +14,14 @@ public class RecipeIngredient {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "ingredient_id")
-    private Integer ingredientId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 
-    @Column(name = "recipe_id")
-    private Integer recipeId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ingredient_id", nullable = false)
+    private Ingredient ingredient;
 
-    @Column(name = "measurement")
-    private String measurement;
+    @Column(name = "measure")
+    private String measure;
 }

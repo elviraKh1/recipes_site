@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "ingridients")
+@Table(name = "ingredients")
 public class Ingredient {
 
     @Id
@@ -17,6 +19,11 @@ public class Ingredient {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "ingredient",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<RecipeIngredient> recipeIngredients;
 
 }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,14 +24,19 @@ public class Recipe {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "author_id")
+    private Integer authorId;
 
     @Column(name = "instructions")
     private String instructions;
 
     @Column(name = "category")
     private String category;
+
+    @OneToMany(mappedBy = "recipe",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<RecipeIngredient> recipeIngredients;
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
