@@ -31,13 +31,13 @@ public class RecipeController {
     private AuthenticatedUserService authenticatedUserService;
 
     @GetMapping("/recipe/add")
-    public ModelAndView createCustomer() {
+    public ModelAndView createRecipe() {
         ModelAndView response = new ModelAndView("recipe/edit");
-        log.info("In create customer with NO args");
+        log.info("In create recipe with NO args");
         return response;
     }
     @GetMapping("/recipe/edit/{id}")
-    public ModelAndView editCustomer(@PathVariable int id, @RequestParam(required = false) String success) {
+    public ModelAndView editRecipe(@PathVariable int id, @RequestParam(required = false) String success) {
         log.info("######################### In edit  recipe with id " + id + " #########################");
         ModelAndView response = new ModelAndView("recipe/edit");
         Recipe recipe = recipeDAO.findById(id);

@@ -26,7 +26,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/recipe/edit">Create recipe</a>
+                    <a class="nav-link" href="/recipe/add">Create recipe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ingredient/add">Create Ingredient</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/recipe/search">Search recipe</a>

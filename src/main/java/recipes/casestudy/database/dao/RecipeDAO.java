@@ -10,12 +10,12 @@ import java.util.List;
 @Repository
 public interface RecipeDAO extends JpaRepository<Recipe, Long> {
 
-    public Recipe findById(Integer id);
+    Recipe findById(Integer id);
 
-    public int deleteById(Integer id);
+    int deleteById(Integer id);
 
     @Query("select r from Recipe r where r.name like :name or r.instructions like :instructions ")
-    public List<Recipe> findByText(String name, String instructions);
+    List<Recipe> findByText(String name, String instructions);
 
-    public List<Recipe> findByAuthorId(Integer authorId);
+    List<Recipe> findByAuthorId(Integer authorId);
 }
