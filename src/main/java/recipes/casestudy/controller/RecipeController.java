@@ -30,6 +30,12 @@ public class RecipeController {
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
 
+    @GetMapping("/recipe/add")
+    public ModelAndView createCustomer() {
+        ModelAndView response = new ModelAndView("recipe/edit");
+        log.info("In create customer with NO args");
+        return response;
+    }
     @GetMapping("/recipe/edit/{id}")
     public ModelAndView editCustomer(@PathVariable int id, @RequestParam(required = false) String success) {
         log.info("######################### In edit  recipe with id " + id + " #########################");
