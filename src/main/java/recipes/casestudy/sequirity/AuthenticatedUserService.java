@@ -1,6 +1,7 @@
 package recipes.casestudy.sequirity;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import recipes.casestudy.database.dao.UserDAO;
 import recipes.casestudy.database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class AuthenticatedUserService {
 
@@ -27,13 +29,18 @@ public class AuthenticatedUserService {
         // in our case the username is the email
         SecurityContext context = SecurityContextHolder.getContext();
         if (context != null && context.getAuthentication() != null) {
-            final org.springframework.security.core.userdetails.User principal =
-                    (org.springframework.security.core.userdetails.User) context.getAuthentication().getPrincipal();
-            return principal.getUsername();
-        } else {
-            // there is no spring security context for this user so they are not logged in
-            return null;
+            Object objPrincipal = context.getAuthentication().getPrincipal();
+            if (objPrincipal instanceof String) {
+                // there is no spring security context for this user so they are not logged in
+                log.debug(objPrincipal.toString());
+                return null;
+            } else {
+                final org.springframework.security.core.userdetails.User principal =
+                        (org.springframework.security.core.userdetails.User) objPrincipal;
+                return principal.getUsername();
+            }
         }
+        return null;
     }
 
     public User loadCurrentUser() {

@@ -64,7 +64,11 @@
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
-                                <a href='/recipe/edit/${recipe.id}' class='btn btn-primary '>Edit</a>
+                                <sec:authorize access="isAuthenticated()">
+                                    <c:if test="${user != null && recipe.authorId == user.id}">
+                                        <a href='/recipe/edit/${recipe.id}' class='btn btn-primary '>Edit</a>
+                                    </c:if>
+                                </sec:authorize>
                             </div>
                         </div>
                     </div>

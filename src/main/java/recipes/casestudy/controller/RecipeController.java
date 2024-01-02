@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import recipes.casestudy.database.dao.RecipeDAO;
 import recipes.casestudy.database.entity.Recipe;
+import recipes.casestudy.database.entity.User;
 import recipes.casestudy.formbean.RecipeFormBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
 import recipes.casestudy.service.RecipeService;
@@ -96,8 +97,9 @@ public class RecipeController {
             response.setViewName("redirect:/error/404");
             return response;
         }
-
+        User user = authenticatedUserService.loadCurrentUser();
         response.addObject("recipe", recipe);
+        response.addObject("user", user);
         return response;
     }
 
