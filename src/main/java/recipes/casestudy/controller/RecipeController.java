@@ -17,6 +17,8 @@ import recipes.casestudy.formbean.RecipeFormBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
 import recipes.casestudy.service.RecipeService;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 public class RecipeController {
@@ -36,6 +38,7 @@ public class RecipeController {
         log.info("In create recipe with NO args");
         return response;
     }
+
     @GetMapping("/recipe/edit/{id}")
     public ModelAndView editRecipe(@PathVariable int id, @RequestParam(required = false) String success) {
         log.info("######################### In edit  recipe with id " + id + " #########################");
@@ -82,9 +85,9 @@ public class RecipeController {
         return response;
     }
 
-    @GetMapping("/recipe/show/")
+    @GetMapping("/recipe/detail/")
     public ModelAndView showRecipe(@RequestParam Integer id) {
-        ModelAndView response = new ModelAndView("recipe/show");
+        ModelAndView response = new ModelAndView("recipe/detail");
         log.info("######################### In /recipe /show with id " + id + " #########################");
 
         Recipe recipe = recipeDAO.findById(id);
@@ -98,5 +101,32 @@ public class RecipeController {
         return response;
     }
 
+    @GetMapping("/recipe/search")
+    public ModelAndView searchRecipe(@RequestParam(required = false) String search) {
+        ModelAndView response = new ModelAndView("index");
+        log.debug("######################### Search recipe with " + search + " #########################");
+        List<Recipe> recipes;
+        if (!StringUtils.isEmpty(search)) {
+            search = "%" + search + "%";
+            recipes = recipeDAO.findByText(search);
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
+        } else {
+            recipes = recipeDAO.findAll();
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
+        }
 
+        response.addObject("recipes", recipes);
+        return response;
+    }
+
+    @GetMapping("/")
+    public ModelAndView allRecipes() {
+        ModelAndView response = new ModelAndView("index");
+        log.debug("######################### All recipe with " + " #########################");
+        List<Recipe> recipes = recipeDAO.findAll();
+        log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++" + recipes.toString());
+
+        response.addObject("recipes", recipes);
+        return response;
+    }
 }
