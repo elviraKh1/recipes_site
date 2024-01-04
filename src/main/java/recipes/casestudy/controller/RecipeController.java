@@ -110,7 +110,7 @@ public class RecipeController {
         List<Recipe> recipes;
         if (!StringUtils.isEmpty(search)) {
             search = "%" + search + "%";
-            recipes = recipeDAO.findByText(search);
+            recipes = recipeDAO.findByNameOrInstructions(search);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
         } else {
             recipes = recipeDAO.findAll();
