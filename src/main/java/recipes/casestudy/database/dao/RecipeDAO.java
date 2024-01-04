@@ -1,5 +1,7 @@
 package recipes.casestudy.database.dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,5 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
     List<Recipe> findByNameOrInstructions(String word);
 
     List<Recipe> findByAuthorId(Integer authorId);
-
-    List<Recipe> findAll();
+    Page<Recipe> findAll(Pageable pageable);
 }

@@ -3,6 +3,10 @@ package recipes.casestudy.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -122,13 +126,22 @@ public class RecipeController {
     }
 
     @GetMapping("/")
-    public ModelAndView allRecipes() {
+    public ModelAndView allRecipes(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                   @RequestParam(defaultValue = "2", required = false) Integer size
+                                   ) {
         ModelAndView response = new ModelAndView("index");
         log.debug("######################### All recipe with " + " #########################");
-        List<Recipe> recipes = recipeDAO.findAll();
-        log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++" + recipes.toString());
+        Pageable paging = PageRequest.of(page, size);
+        Page<Recipe> recipes = recipeDAO.findAll(paging);
 
         response.addObject("recipes", recipes);
         return response;
     }
+
+//    @GetMapping("/getAll/{offset}")
+//    public Iterable<Recipe> getAllRecipes(@RequestParam Integer pageSize, @PathVariable("offset") Integer offset){
+//        Pageable paging = PageRequest.of(pageNo, pageSize);
+//        Page<Recipe> pagedResult = recipeDAO.findAll(paging);
+//
+//    }
 }
