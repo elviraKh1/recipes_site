@@ -14,7 +14,7 @@ public interface IngredientDAO extends JpaRepository<Ingredient, Long> {
 
     int deleteById(Integer id);
 
-    @Query("select i from Ingredient i where i.name like :name")
-    List<Ingredient> findByName(String name);
+//    @Query("select i from Ingredient i where i.name like :name")
+    List<Ingredient> findByNameLikeIgnoreCase(String name);
 
 }

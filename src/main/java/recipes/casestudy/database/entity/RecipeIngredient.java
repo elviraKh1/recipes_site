@@ -18,10 +18,20 @@ public class RecipeIngredient {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
     @Column(name = "measure")
     private String measure;
+
+    @Override
+    public String toString() {
+        return "RecipeIngredient{" +
+                "id=" + id +
+                ", recipe=" + recipe +
+                ", ingredient=" + ingredient +
+                ", measure='" + measure + '\'' +
+                '}';
+    }
 }

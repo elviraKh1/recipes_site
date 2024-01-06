@@ -78,6 +78,13 @@
         </div>
     </div>
 </section>
-
+<table class='table'>
+    <c:forEach items="${ingredients}" var="ingredient">
+        <tr>
+            <td>${ingredient.ingredient.name}</td>
+            <td>${ingredient.measure}</td>
+        </tr>
+    </c:forEach>
+</table>
 
 <jsp:include page="../include/footer.jsp"/>

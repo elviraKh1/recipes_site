@@ -16,11 +16,12 @@
             </div>
         </c:if>
 
-        <form method="GET" action="/recipe/submit">
+        <form method="post" action="/recipe/submit" autocomplete="off">
             <input type="hidden" name="id" value="${form.id}">
             <div class="mt-3">
                 <label for="name" class="form-label">name</label>
-                <input type="text" class="form-control" id="name"  name="name" aria-describedby="firstNameHelp"  value="${form.name}">
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="firstNameHelp"
+                       value="${form.name}">
                 <div id="firstNameHelp" class="form-text">Enter recipe name.</div>
 
                 <c:if test="${errors.hasFieldErrors('name')}">
@@ -33,7 +34,8 @@
             </div>
             <div class="mt-3">
                 <label for="instructions" class="form-label">instructions</label>
-                <input type="text" class="form-control" id="instructions" name="instructions" aria-describedby="lastNameHelp"  value="${form.instructions}">
+                <input type="text" class="form-control" id="instructions" name="instructions"
+                       aria-describedby="lastNameHelp" value="${form.instructions}">
                 <div id="lastNameHelp" class="form-text">enter instructions.</div>
                 <c:if test="${errors.hasFieldErrors('instructions')}">
                     <div style="color:red">
@@ -45,7 +47,8 @@
             </div>
             <div class="mt-3">
                 <label for="image_url" class="form-label">image</label>
-                <input type="text" class="form-control" id="image_url" name="image_url" aria-describedby="departmentNameHelp"  value="${form.imageUrl}">
+                <input type="text" class="form-control" id="image_url" name="image_url"
+                       aria-describedby="departmentNameHelp" value="${form.imageUrl}">
                 <div id="departmentNameHelp" class="form-text">image_url</div
                 <c:if test="${errors.hasFieldErrors('image_url')}">
                     <div style="color:red">
@@ -55,9 +58,34 @@
                     </div>
                 </c:if>
             </div>
+
+            <div class="mt-3" id="formFields">
+            <c:forEach items="${ingredients}" var="ingredient" varStatus="loopStatus">
+                    <label for="ingredient" class="form-label">ingredient ${loopStatus.index}</label>
+                    <input type="text" class="form-control __ingredient" id="ingredient" name="ingredientName_${loopStatus.index}"
+                           aria-describedby="lastNameHelp" value="${ingredient.ingredient.name}">
+                        <%--                <input type="text" class="form-control" id="ingredientCount" name="quantity_0" aria-describedby="lastNameHelp"  >--%>
+                    <input type="text" class="form-control" id="ingredientMeasure" name="measure_${loopStatus.index}"
+                           aria-describedby="lastNameHelp" value="${ingredient.measure}">
+                    <input id="ingredientId_${loopStatus.index}" type="hidden" class="form-control" name="ingredientId_${loopStatus.index}" value="${ingredient.ingredient.id}">
+
+                    <div id="lastNameHelp" class="form-text">enter ingredient name.</div>
+                    <c:if test="${errors.hasFieldErrors('instructions')}">
+                        <div style="color:red">
+                            <c:forEach items="${errors.getFieldErrors('instructions')}" var="error">
+                                ${error.defaultMessage}<br>
+                            </c:forEach>
+                        </div>
+                    </c:if>
+            </c:forEach>
+            </div>
+
+            <button type="button" onclick="addFields()">add Input</button>
+
+
             <div class="mt-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <c:if test="${form.id != null}"> <a href="/recipe/show/?id=${form.id}"
+                <c:if test="${form.id != null}"> <a href="/recipe/detail/?id=${form.id}"
                                                     class="btn btn-primary  ">View</a> </c:if>
             </div>
 

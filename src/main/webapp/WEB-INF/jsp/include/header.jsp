@@ -13,6 +13,69 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script type="text/javascript">
+        var currentFileld=1;
+        function addFields() {
+            currentFileld++;
+            let formFields = document.getElementById('formFields');
+            let fieldDiv = document.createElement('div');
+
+            // name
+            let nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.name = 'ingredientName_'+currentFileld;
+            nameInput.placeholder = 'Ingredient name';
+            nameInput.classList.add('__ingredient')
+
+            //hidddent id
+            let hiddenIdInput = document.createElement('input');
+            hiddenIdInput.type = 'hidden';
+            hiddenIdInput.id = 'ingredientId_'+currentFileld;
+            hiddenIdInput.name = 'ingredientId_'+currentFileld;
+
+            // quantity
+            // let quantityInput = document.createElement('input');
+            // quantityInput.type = 'number';
+            // quantityInput.name = 'quantity_'+currentFileld;
+            // quantityInput.placeholder = 'Ingredient quantity';
+
+            // measure
+            let measureInput = document.createElement('input');
+            measureInput.type = 'text';
+            measureInput.name = 'measure_'+currentFileld;
+            measureInput.placeholder = 'Ingredient measure';
+
+
+            // Добавляем поля в div
+            fieldDiv.appendChild(nameInput);
+            fieldDiv.appendChild(hiddenIdInput);
+            // fieldDiv.appendChild(quantityInput);
+            fieldDiv.appendChild(measureInput);
+            // Добавляем div с полями в форму
+            formFields.appendChild(fieldDiv);
+        }
+
+        // call Autocomplete function
+            $(document).on("focus", '.__ingredient', function() {
+            $(this).autocomplete({
+                source: "ingredientAutocomplete",
+                minLength: 3,
+                select: function(event, ui) {
+                    this.value = ui.item.label;
+                    $("#ingredientId_"+this.name.substring(this.name.indexOf('_') + 1)).val(ui.item.value);
+                    return false;
+                }
+            });
+        })
+        // })
+    </script>
+
 </head>
 <body>
 

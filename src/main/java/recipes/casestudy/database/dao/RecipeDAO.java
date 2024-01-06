@@ -17,7 +17,7 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
     int deleteById(Integer id);
 
     @Query("select r from Recipe r where r.name like :word or r.instructions like :word ")
-    List<Recipe> findByNameOrInstructions(String word);
+    Page<Recipe> findByNameOrInstructions(String word,Pageable pageable);
 
     List<Recipe> findByAuthorId(Integer authorId);
     Page<Recipe> findAll(Pageable pageable);
