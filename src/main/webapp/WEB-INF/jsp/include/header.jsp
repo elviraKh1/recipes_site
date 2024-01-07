@@ -20,24 +20,38 @@
 
 
     <script type="text/javascript">
-        var currentFileld=1;
+
+
+        function removeElement(ev) {
+            let button = ev.target;
+            let div = button.parentElement;
+            // div.innerHTML = '';
+            div.remove();  // Remove
+        }
+
         function addFields() {
-            currentFileld++;
+            const num = this.name.match(/\d+/);
             let formFields = document.getElementById('formFields');
             let fieldDiv = document.createElement('div');
+
+            let ingredientsInputs = formFields.getElementsByClassName('__ingredient')
+
+            let currentField = 0
+            if (ingredientsInputs != null)
+                currentField = ingredientsInputs.length;
 
             // name
             let nameInput = document.createElement('input');
             nameInput.type = 'text';
-            nameInput.name = 'ingredientName_'+currentFileld;
+            nameInput.name = 'ingredientsInp[' + currentField + '].name';
             nameInput.placeholder = 'Ingredient name';
             nameInput.classList.add('__ingredient')
 
             //hidddent id
             let hiddenIdInput = document.createElement('input');
             hiddenIdInput.type = 'hidden';
-            hiddenIdInput.id = 'ingredientId_'+currentFileld;
-            hiddenIdInput.name = 'ingredientId_'+currentFileld;
+            hiddenIdInput.id = 'ingredientId_' + currentField;
+            hiddenIdInput.name = 'ingredientsInp[' + currentField + '].id'
 
             // quantity
             // let quantityInput = document.createElement('input');
@@ -48,8 +62,17 @@
             // measure
             let measureInput = document.createElement('input');
             measureInput.type = 'text';
-            measureInput.name = 'measure_'+currentFileld;
+            measureInput.name = 'ingredientsInp[' + currentField + '].measure';
             measureInput.placeholder = 'Ingredient measure';
+
+            //create remove button
+            let remove = document.createElement('button');
+            remove.setAttribute('id', 'reqsr' + +currentField);
+            remove.onclick = function (e) {
+                removeElement(e)
+            };
+            remove.setAttribute("type", "button");
+            remove.innerHTML = "Remove" + +currentField;
 
 
             // Добавляем поля в div
@@ -57,18 +80,21 @@
             fieldDiv.appendChild(hiddenIdInput);
             // fieldDiv.appendChild(quantityInput);
             fieldDiv.appendChild(measureInput);
+            fieldDiv.appendChild(remove);
             // Добавляем div с полями в форму
             formFields.appendChild(fieldDiv);
+            currentField++;
         }
 
         // call Autocomplete function
-            $(document).on("focus", '.__ingredient', function() {
+        $(document).on("focus", '.__ingredient', function () {
             $(this).autocomplete({
                 source: "ingredientAutocomplete",
                 minLength: 3,
-                select: function(event, ui) {
+                select: function (event, ui) {
                     this.value = ui.item.label;
-                    $("#ingredientId_"+this.name.substring(this.name.indexOf('_') + 1)).val(ui.item.value);
+                    const num = this.name.match(/\d+/);
+                    $("#ingredientId_" + num).val(ui.item.value);
                     return false;
                 }
             });

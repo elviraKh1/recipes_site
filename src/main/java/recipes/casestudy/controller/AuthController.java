@@ -3,6 +3,7 @@ package recipes.casestudy.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import recipes.casestudy.database.dao.UserDAO;
 import recipes.casestudy.database.entity.User;
 import recipes.casestudy.formbean.RegisterUserFormBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
@@ -21,6 +22,8 @@ public class AuthController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserDAO userDAO;
 
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
@@ -32,6 +35,7 @@ public class AuthController {
 
         return response;
     }
+
     @GetMapping("/auth/login")
     public ModelAndView login() {
         ModelAndView response = new ModelAndView();
@@ -42,6 +46,12 @@ public class AuthController {
     @GetMapping("/auth/registerSubmit")
     public ModelAndView register(@Valid RegisterUserFormBean form, BindingResult bindingResult, HttpSession session) {
         log.info("######################### In register user #########################");
+
+        User user = userDAO.findByEmailIgnoreCase(form.getEmail());
+
+        if (user != null) {
+            bindingResult.rejectValue("email", "field.error", "User with this email exist");
+        }
 
         if (bindingResult.hasErrors()) {
             log.info("######################### In  register user submit -HAS ERRORS #########################");
@@ -55,7 +65,7 @@ public class AuthController {
             return response;
         }
 
-        User user = userService.createNewUser(form);
+        user = userService.createNewUser(form);
 
         authenticatedUserService.authenticateNewUser(session, user.getEmail(), form.getPassword());
         ModelAndView response = new ModelAndView();

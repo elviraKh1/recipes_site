@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class RecipeFormBean {
@@ -24,6 +26,8 @@ public class RecipeFormBean {
 
     private String imageUrl;
 
+    private List<RecipeIngredientFormBean> ingredientsInp;
+
     @Override
     public String toString() {
         return "RecipeFormBean{" +
@@ -32,6 +36,7 @@ public class RecipeFormBean {
                 ", instructions='" + instructions + '\'' +
                 ", category='" + category + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", ingredientsInp=" + ingredientsInp +
                 '}';
     }
 }

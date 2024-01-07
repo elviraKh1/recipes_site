@@ -27,6 +27,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User createNewUser(RegisterUserFormBean form) {
+
         User user = new User();
 
         user.setEmail(form.getEmail().toLowerCase());

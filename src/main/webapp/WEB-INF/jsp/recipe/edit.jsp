@@ -60,24 +60,28 @@
             </div>
 
             <div class="mt-3" id="formFields">
-            <c:forEach items="${ingredients}" var="ingredient" varStatus="loopStatus">
+                <c:if test="${errors.hasFieldErrors('ingredientsInp')}">
+                    <div style="color:red">
+                        <c:forEach items="${errors.getFieldErrors('ingredientsInp')}" var="error">
+                            ${error.defaultMessage}<br>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:forEach items="${form.getIngredientsInp()}" var="ingredientFild" varStatus="loopStatus">
+                    <div>
                     <label for="ingredient" class="form-label">ingredient ${loopStatus.index}</label>
-                    <input type="text" class="form-control __ingredient" id="ingredient" name="ingredientName_${loopStatus.index}"
-                           aria-describedby="lastNameHelp" value="${ingredient.ingredient.name}">
-                        <%--                <input type="text" class="form-control" id="ingredientCount" name="quantity_0" aria-describedby="lastNameHelp"  >--%>
-                    <input type="text" class="form-control" id="ingredientMeasure" name="measure_${loopStatus.index}"
-                           aria-describedby="lastNameHelp" value="${ingredient.measure}">
-                    <input id="ingredientId_${loopStatus.index}" type="hidden" class="form-control" name="ingredientId_${loopStatus.index}" value="${ingredient.ingredient.id}">
-
+                    <input type="text" class="form-control __ingredient" id="ingredient"
+                           name="ingredientsInp[${loopStatus.index}].name"
+                           aria-describedby="lastNameHelp" value="${ingredientFild.name}">
+                    <%--                <input type="text" class="form-control" id="ingredientCount" name="quantity_0" aria-describedby="lastNameHelp"  >--%>
+                    <input type="text" class="form-control" name="ingredientsInp[${loopStatus.index}].measure"
+                           aria-describedby="lastNameHelp" value="${ingredientFild.measure}">
+                    <input id="ingredientId_${loopStatus.index}" type="hidden" class="form-control"
+                           name="ingredientsInp[${loopStatus.index}].id" value="${ingredientFild.id}">
+                    <button id="reqsr${loopStatus.index}" type="button"  onclick="removeElement(event)">Remove</button>
                     <div id="lastNameHelp" class="form-text">enter ingredient name.</div>
-                    <c:if test="${errors.hasFieldErrors('instructions')}">
-                        <div style="color:red">
-                            <c:forEach items="${errors.getFieldErrors('instructions')}" var="error">
-                                ${error.defaultMessage}<br>
-                            </c:forEach>
-                        </div>
-                    </c:if>
-            </c:forEach>
+                    </div>
+                </c:forEach>
             </div>
 
             <button type="button" onclick="addFields()">add Input</button>

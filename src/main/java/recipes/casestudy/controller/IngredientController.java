@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import recipes.casestudy.database.dao.IngredientDAO;
 import recipes.casestudy.database.entity.Ingredient;
 import recipes.casestudy.formbean.IngredientFormBean;
-import recipes.casestudy.formbean.LabelValueAutocmpleteBean;
+import recipes.casestudy.formbean.LabelValueAutocompleteBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
 import recipes.casestudy.service.IngredientService;
 
@@ -134,8 +134,8 @@ public class IngredientController {
 
     @RequestMapping(value={"/recipe/ingredientAutocomplete","/recipe/edit/ingredientAutocomplete"})
     @ResponseBody
-    public List<LabelValueAutocmpleteBean> ingredientAutocomplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
-        List<LabelValueAutocmpleteBean> suggestions = new ArrayList<>();
+    public List<LabelValueAutocompleteBean> ingredientAutocomplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
+        List<LabelValueAutocompleteBean> suggestions = new ArrayList<>();
         log.debug("######################### All ingredients with " + term+ " #########################");
         List<Ingredient>  ingredients=new ArrayList<>();
 
@@ -145,7 +145,7 @@ public class IngredientController {
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ find " + ingredients.size()+" ingredients");
         }
         for (Ingredient ingredient : ingredients) {
-                    LabelValueAutocmpleteBean lv= new LabelValueAutocmpleteBean(ingredient.getId(),ingredient.getName());
+                    LabelValueAutocompleteBean lv= new LabelValueAutocompleteBean(ingredient.getId(),ingredient.getName());
                     suggestions.add(lv);
             }
         return suggestions;

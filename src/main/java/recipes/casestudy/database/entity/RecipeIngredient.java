@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Entity
@@ -33,5 +35,18 @@ public class RecipeIngredient {
                 ", ingredient=" + ingredient +
                 ", measure='" + measure + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecipeIngredient recipeIngredient  = (RecipeIngredient) o;
+        return recipeIngredient.ingredient.equals(ingredient) && recipeIngredient.recipe.equals(recipe)  && recipeIngredient.measure.equals(measure)  ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipe,ingredient);
     }
 }

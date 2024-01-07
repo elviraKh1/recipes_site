@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LabelValueAutocmpleteBean {
+public class LabelValueAutocompleteBean {
 
     private Integer value;
     private String label;

@@ -3,7 +3,9 @@ package recipes.casestudy.database.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,13 +37,18 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<RecipeIngredient> recipeIngredients;
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients)
+    {
+        this.recipeIngredients.addAll(recipeIngredients);
+    }
 
 }
 

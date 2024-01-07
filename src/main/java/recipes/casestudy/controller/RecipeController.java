@@ -8,13 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import recipes.casestudy.database.dao.IngredientDAO;
 import recipes.casestudy.database.dao.RecipeDAO;
@@ -24,9 +22,11 @@ import recipes.casestudy.database.entity.Recipe;
 import recipes.casestudy.database.entity.RecipeIngredient;
 import recipes.casestudy.database.entity.User;
 import recipes.casestudy.formbean.RecipeFormBean;
+import recipes.casestudy.formbean.RecipeIngredientFormBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
 import recipes.casestudy.service.RecipeService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,62 +67,51 @@ public class RecipeController {
         }
 
         RecipeFormBean form = new RecipeFormBean();
+        List<RecipeIngredientFormBean> ingredientFormBeans = new ArrayList<>();
         if (recipe != null) {
             form.setName(recipe.getName());
             form.setCategory(recipe.getCategory());
             form.setInstructions(recipe.getInstructions());
             form.setImageUrl(recipe.getImageUrl());
             form.setId(recipe.getId());
+
+
+            for (RecipeIngredient recipeIngredient: ingredients) {
+                RecipeIngredientFormBean ingredientFormBean = new RecipeIngredientFormBean();
+                ingredientFormBean.setId(recipeIngredient.getIngredient().getId());
+                ingredientFormBean.setName(recipeIngredient.getIngredient().getName());
+                ingredientFormBean.setMeasure(recipeIngredient.getMeasure());
+                ingredientFormBeans.add(ingredientFormBean);
+            }
+
         } else {
             log.warn("?????????? recipe with id " + id + " NOT found ??????????");
         }
+        form.setIngredientsInp(ingredientFormBeans);
         response.addObject("form", form);
-        response.addObject("ingredients", ingredients);
+
         return response;
     }
 
     @PostMapping("/recipe/submit")
-    public ModelAndView submitRecipe(//@Valid
-                                     RecipeFormBean form,
-                                     BindingResult bindingResult,
-                                     @RequestParam Map<String, String> formData) {
+    public ModelAndView submitRecipe2(@Valid RecipeFormBean form,
+                                      BindingResult bindingResult) {
         ModelAndView response = new ModelAndView("recipe/edit");
-        ////////////
-        Recipe recipe = recipeService.addRecipe(form);
 
-        log.info("######################### In submit recipe with args #########################");
-        log.info("######################### formData "+formData);
+        log.debug("######################### In submit recipe with args #########################");
 
-        for (Map.Entry<String, String> entry : formData.entrySet()) {
-            String fieldName = entry.getKey();
-            if (fieldName.startsWith("ingredientName_")) {
-                int cnt = Integer.parseInt(fieldName.substring(fieldName.indexOf("_") + 1));
-                log.info("######################### cnt "+cnt);
-                log.info("######################### formData.get(\"ingredientId_0\" ) "+formData.get("ingredientId_" + cnt));
-                log.info("######################### cnt "+cnt);
-                Ingredient ingredient = ingredientDAO.findById(Integer.valueOf(formData.get("ingredientId_" + cnt)));
-                //if (!ingredient.getName().equalsIgnoreCase(fieldName)){
-                //    bindingResult.rejectValue(fieldName, "field.error", "Field cannot be found in database");
-                // }else{
-//                List<RecipeIngredient> ingredients =
-                log.debug("+++++++++++++++++++++++ ingredient= "+ingredient);
-                log.debug("+++++++++++++++++++++++ recipe "+recipe);
-                RecipeIngredient recipeIngredient = recipeIngredientDAO.getRecipeIngredientByRecipeAndIngredient(recipe, ingredient);
-                log.debug("+++++++++++++++++++++++"+recipeIngredient);
-                if (recipeIngredient == null)
-                    recipeIngredient = new RecipeIngredient();
-                log.debug("+++++++++++++++++++++++"+recipeIngredient.toString());
-                recipeIngredient.setRecipe(recipe);
-                recipeIngredient.setIngredient(ingredient);
-                recipeIngredient.setMeasure(
-//                            formData.get(                            "quantity_"+cnt)+" "+
-                        formData.get("measure_" + cnt));
-                recipeIngredientDAO.save(recipeIngredient);
-                // };
-
-
+        List<RecipeIngredientFormBean> ingredientFormBeans = form.getIngredientsInp();
+        if (ingredientFormBeans != null) {
+            ingredientFormBeans.removeIf(ingredientFormBean ->ingredientFormBean.getId()==null);
+            for (RecipeIngredientFormBean ingredientFormBean : ingredientFormBeans) {
+                Ingredient ingredient = ingredientDAO.findById(ingredientFormBean.getId());
+                if (ingredient == null) {
+                    bindingResult.rejectValue("ingredientsInp", "field.error", "Field cannot be found in database");
+                    break;
+                }
             }
         }
+
         if (bindingResult.hasErrors()) {
             log.info("######################### In create recipe  submit -HAS ERRORS #########################");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -133,7 +122,8 @@ public class RecipeController {
             return response;
         }
 
-//        Recipe recipe = recipeService.addRecipe(form);
+
+        Recipe recipe = recipeService.addRecipe(form);
 
         response.setViewName("redirect:/recipe/edit/" + recipe.getId() + "?success=Recipe Saved Successfully");
 
@@ -160,6 +150,20 @@ public class RecipeController {
         return response;
     }
 
+    @Transactional
+    @GetMapping("/recipe/delete/")
+    public ModelAndView deleteRecipe(@RequestParam Integer id) {
+        ModelAndView response = new ModelAndView("index");
+        log.info("######################### In /recipe / delete with id " + id + " #########################");
+
+        User user = authenticatedUserService.loadCurrentUser();
+        recipeDAO.deleteById(id);
+
+        response.addObject("user", user);
+        response.setViewName("redirect:/?success=Recipe delete Successfully");
+        return response;
+    }
+
     @GetMapping("/recipe/search")
     public ModelAndView searchRecipe(@RequestParam(required = false) String search,
                                      @RequestParam(defaultValue = "0", required = false) Integer page,
@@ -178,6 +182,9 @@ public class RecipeController {
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
         }
 
+        User user = authenticatedUserService.loadCurrentUser();
+        response.addObject("user", user);
+
         response.addObject("recipes", recipes);
         return response;
     }
@@ -190,6 +197,9 @@ public class RecipeController {
         log.debug("######################### All recipe with " + " #########################");
         Pageable paging = PageRequest.of(page, size);
         Page<Recipe> recipes = recipeDAO.findAll(paging);
+
+        User user = authenticatedUserService.loadCurrentUser();
+        response.addObject("user", user);
 
         response.addObject("recipes", recipes);
         return response;
