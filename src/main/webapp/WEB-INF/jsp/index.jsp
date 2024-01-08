@@ -2,38 +2,59 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="include/header.jsp"/>
-<h1 class="pb-3">search by ingredient</h1>
 
-<form method="GET" action="/recipe/search">
-    <div class="mb-3">
-        <label for="search" class="form-label">Search</label>
-        <input type="text" class="form-control" id="search" name="search" placeholder="Search by name"
-               value="${search}">
+<section id="recipes" class="recipes">
+    <div class="container" data-aos="fade-up">
+
+        <ul class="nav justify-content-center  nav-underline">
+            <li class="nav-item">
+                <a class="nav-link <c:if test="${category eq ''}" >active</c:if>" aria-current="page" href="/">All</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <c:if test="${category eq 'Breakfast'}" >active</c:if>" aria-current="page" href="/recipe/category?c=Breakfast">Breakfast</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <c:if test="${category eq 'Lunch'}" >active</c:if>" href="/recipe/category?c=Lunch">Lunch</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <c:if test="${category eq 'Dinner'}" >active</c:if>" href="/recipe/category?c=Dinner">Dinner</a>
+            </li>
+        </ul>
+
+        <c:if test="${not empty recipes}">
+
+        <h6 class="pt-3">recipes found ${recipes.getTotalElements()} </h6>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="300" >
+            <div class="row gy-4">
+                <c:forEach items="${recipes.getContent()}" var="recipe">
+                    <div class="col-lg-4 recipes-item  justify-content-center" >
+                        <h4>${recipe.name}</h4>
+                        <a href="/recipe/detail/?id=${recipe.id}" class="glightbox"><img
+                                src="${recipe.imageUrl}" class="recipes-img img-recipes-item" alt=""></a>
+
+
+                        <a href="/recipe/detail/?id=${recipe.id}"  ><button type="button" class="btn btn-outline-secondary">Detail</button></a>
+                        <a href="/recipe/detail/?id=${recipe.id}"  ><button type="button" class="btn btn-outline-secondary">Bookmark</button></a>
+                        <sec:authorize access="isAuthenticated()">
+                            <c:if test="${user != null && recipe.authorId == user.id}">
+                                <a href="/recipe/delete/?id=${recipe.id}"  > <button type="button" class="btn btn-outline-secondary">Delete</button></a>
+                            </c:if>
+                        </sec:authorize>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+
+        </c:if>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</section>
+        <nav >
+            <ul class="pagination justify-content-center">
+                <li class="page-item <c:if test="${!recipes.hasPrevious()}">disabled</c:if> "><a class="page-link" href="/?page=${recipes.getNumber()-1}">Prev</a></li>
+                <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if> "><a class="page-link" href="/?page=${recipes.getNumber()+1}">Next</a></li>
+            </ul>
+        </nav>
 
 
-<c:if test="${not empty recipes}">
-    <h6 class="pt-3">recipes found ${recipes.getTotalElements()} </h6>
-    <table class='table'>
-        <c:forEach items="${recipes.getContent()}" var="recipe">
-            <tr>
-                <td>${recipe.name}</td>
-                <td>${recipe.id}</td>
-                <td><img src="${recipe.imageUrl}" style="max-width: 100px"></td>
-                    <%--                <td><a href="/customer/edit/${customer.id}">Edit</a></td>--%>
-                <td><a href="/recipe/detail/?id=${recipe.id}">Detail</a></td>
-                <sec:authorize access="isAuthenticated()">
-                    <c:if test="${user != null && recipe.authorId == user.id}">
-                        <td><a href="/recipe/delete/?id=${recipe.id}">delete</a></td>
-                    </c:if>
-                </sec:authorize>
-            </tr>
-        </c:forEach>
-    </table>
-    <c:if test="${recipes.hasPrevious()}"><a href="/?page=${recipes.getNumber()-1}">&lt;</a></c:if>
-    <c:if test="${recipes.hasNext()}"><a href="/?page=${recipes.getNumber()+1}">&gt;</a></c:if>
-
-</c:if>
 <jsp:include page="include/footer.jsp"/>

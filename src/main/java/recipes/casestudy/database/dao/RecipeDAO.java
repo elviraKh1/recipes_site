@@ -20,5 +20,9 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
     Page<Recipe> findByNameOrInstructions(String word,Pageable pageable);
 
     List<Recipe> findByAuthorId(Integer authorId);
+
+    @Query("SELECT q FROM Recipe q where q.category = :category")
+    Page<Recipe> findByCategoryIgnoreCase(String category, Pageable pageable);
+
     Page<Recipe> findAll(Pageable pageable);
 }

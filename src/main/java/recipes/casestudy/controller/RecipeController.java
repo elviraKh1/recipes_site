@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import recipes.casestudy.database.dao.IngredientDAO;
 import recipes.casestudy.database.dao.RecipeDAO;
@@ -94,11 +95,14 @@ public class RecipeController {
     }
 
     @PostMapping("/recipe/submit")
-    public ModelAndView submitRecipe2(@Valid RecipeFormBean form,
+    public ModelAndView submitRecipe(//@RequestParam("image_url") MultipartFile imageFile,
+                                      @Valid RecipeFormBean form,
                                       BindingResult bindingResult) {
         ModelAndView response = new ModelAndView("recipe/edit");
 
         log.debug("######################### In submit recipe with args #########################");
+//        log.debug(" In fileupload name " + imageFile.getName());
+//        log.debug(" In fileupload size " + imageFile.getSize());
 
         List<RecipeIngredientFormBean> ingredientFormBeans = form.getIngredientsInp();
         if (ingredientFormBeans != null) {
@@ -157,7 +161,7 @@ public class RecipeController {
         log.info("######################### In /recipe / delete with id " + id + " #########################");
 
         User user = authenticatedUserService.loadCurrentUser();
-        recipeDAO.deleteById(id);
+        recipeService.deleteById(id);
 
         response.addObject("user", user);
         response.setViewName("redirect:/?success=Recipe delete Successfully");
@@ -167,7 +171,7 @@ public class RecipeController {
     @GetMapping("/recipe/search")
     public ModelAndView searchRecipe(@RequestParam(required = false) String search,
                                      @RequestParam(defaultValue = "0", required = false) Integer page,
-                                     @RequestParam(defaultValue = "5", required = false) Integer size) {
+                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
         ModelAndView response = new ModelAndView("index");
         log.debug("######################### Search recipe with " + search + " #########################");
         Page<Recipe> recipes;
@@ -189,9 +193,36 @@ public class RecipeController {
         return response;
     }
 
+
+    @GetMapping("/recipe/category")
+    public ModelAndView searchRecipeByCategory(@RequestParam(required = false) String c,
+                                     @RequestParam(defaultValue = "0", required = false) Integer page,
+                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
+        ModelAndView response = new ModelAndView("index");
+        log.debug("######################### Search recipe with category" + c + " #########################");
+        Page<Recipe> recipes;
+        Pageable paging = PageRequest.of(page, size);
+        String category = c;
+        if (!StringUtils.isEmpty(c)) {
+            recipes = recipeDAO.findByCategoryIgnoreCase(c, paging);
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
+        } else {
+            recipes = recipeDAO.findAll(paging);
+            category ="";
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
+        }
+
+        User user = authenticatedUserService.loadCurrentUser();
+        response.addObject("user", user);
+        response.addObject("category", category);
+        response.addObject("recipes", recipes);
+        return response;
+    }
+
+
     @GetMapping("/")
     public ModelAndView allRecipes(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                   @RequestParam(defaultValue = "2", required = false) Integer size
+                                   @RequestParam(defaultValue = "6", required = false) Integer size
     ) {
         ModelAndView response = new ModelAndView("index");
         log.debug("######################### All recipe with " + " #########################");

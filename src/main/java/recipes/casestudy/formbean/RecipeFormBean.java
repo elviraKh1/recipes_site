@@ -3,6 +3,8 @@ package recipes.casestudy.formbean;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+import recipes.casestudy.annotations.MultipartFileSizeValidation;
 
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class RecipeFormBean {
     private String category;
 
     private String imageUrl;
+
+    @MultipartFileSizeValidation
+    private MultipartFile imageFile;
 
     private List<RecipeIngredientFormBean> ingredientsInp;
 

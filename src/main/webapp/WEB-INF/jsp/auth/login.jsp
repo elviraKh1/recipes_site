@@ -4,46 +4,42 @@
     <div class="bg-light2 pt-5 pb-5">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="m-0">Login</h1>
+                <h2 class="m-0">Login</h2>
             </div>
         </div>
     </div>
 </section>
+<section class="pt-15 pb-15">
+    <div class="container">
 
-<%--<c:if test="${param['error'] != null}">--%>
-<%--<c:if test="${param.error != null}">--%>
-<c:if test="${param['error'] eq ''}">
-    <section class="pt-5">
-        <div class="container">
+        <c:if test="${param['error'] eq ''}">
             <div class="row justify-content-center">
-                <div class="col-6">
-                    <div class="alert alert-danger w-100 mb-0">Invalid Username or Password</div>
+                <div class="col-5 pb-15 alert alert-danger">
+                    Invalid Username or Password
                 </div>
             </div>
-        </div>
-    </section>
-</c:if>
+        </c:if>
 
-<section class="pt-5 pb-5">
-    <div class="container">
+
         <div class="row justify-content-center">
-            <div class="col-6">
-                <!-- the action attribute on the form tag is the URL that the form will submit to when then user clicks the submit button -->
+            <div class="col-5 pb-15  " style="background-color: #f1f1f1;">
                 <form method="post" action="/auth/loginSubmit">
-
-                    <div class="mt-3">
+                    <div class="col-lg-12 col-md-6">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Your username">
                     </div>
 
-                    <div class="mt-3">
+                    <div class="col-lg-12 col-md-6">
                         <label for="password" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="password" name="password">
+                        <input type="text" class="form-control" id="password" name="password"
+                               placeholder="Your password">>
                     </div>
 
-                    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                    <div class="text-center pb-3" >
+                        <button type="submit" class="btn btn-secondary mt-4  ">Submit</button>
+                    </div>
                 </form>
-
             </div>
         </div>
     </div>

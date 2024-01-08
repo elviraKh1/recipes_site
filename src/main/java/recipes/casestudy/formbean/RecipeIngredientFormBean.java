@@ -10,10 +10,10 @@ public class RecipeIngredientFormBean {
 
     private Integer id;
 
-//    @NotEmpty(message = "Name can not be empty")
+    @NotEmpty(message = "Name can not be empty")
     private String name;
 
-//    @NotEmpty(message = "Measure can not be empty")
+    @NotEmpty(message = "Measure can not be empty")
     private String measure;
 
     @Override

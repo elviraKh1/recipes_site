@@ -4,8 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Recipes</title>
-    <link href="/pub/css/global-style.css" rel="stylesheet">
+    <title>The magic porridge pot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous">
@@ -17,7 +22,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+    <link rel="stylesheet" href="../../../pub/css/main.css"/>
 
     <script type="text/javascript">
 
@@ -105,49 +110,47 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+        <a href="/" class="navbar-brand me-auto me-lg-0"> The magic porridge pot </a>
+        <ul class="navbar-nav ">
+            <sec:authorize access="hasAnyAuthority('ADMIN', 'MEMBER')">
                 <li class="nav-item">
-                    <a class="nav-link" href="/recipe/search">Search recipe</a>
+                    <a class="nav-link" href="/admin/index">Admin</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ingredient/add">Create Ingredient</a></a>
+                </li>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/recipe/add">Create recipe</a>
+                </li>
+            </sec:authorize>
+        </ul>
 
-                <sec:authorize access="hasAnyAuthority('ADMIN', 'MEMBER')">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/index">Admin</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/ingredient/add">Create Ingredient</a>
-                    </li>
+        <ul class="  navbar-nav justify-content-end ">
+            <sec:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/logout">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><sec:authentication property="principal.username"/></a>
+                </li>
+            </sec:authorize>
+            <sec:authorize access="!isAuthenticated()">
 
-                </sec:authorize>
-                <sec:authorize access="!isAuthenticated()">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/register">Sign Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/login">Sign In</a>
-                    </li>
-                </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/recipe/add">Create recipe</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/logout">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><sec:authentication property="principal.username"/></a>
-                    </li>
-                </sec:authorize>
-            </ul>
-        </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/register">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/login">Sign In</a>
+                </li>
+            </sec:authorize>
+        </ul>
+        <form class="d-flex" action="/recipe/search" method="GET">
+            <input class="form-control me-2" type="text" placeholder="Search" id="search" name="search">
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </form>
     </div>
 </nav>
