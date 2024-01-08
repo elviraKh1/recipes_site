@@ -1,7 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="../include/header.jsp"/>
-
-<h1>Create Ingredient</h1>
+<section>
+    <div class="bg-light2 pt-5 pb-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="m-0">Create Ingredient</h2>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="pt-5 pb-5">
     <div class="container">
@@ -33,9 +40,9 @@
                 </c:if>
             </div>
             <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <c:if test="${form.id != null}"> <a href="/ingredient/show/?id=${form.id}"
-                                                    class="btn btn-primary  ">View</a> </c:if>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+                <c:if test="${form.id != null}"> <a href="/ingredient/show/?id=${form.id}" class="btn btn-secondary  ">View</a> </c:if>
+                <c:if test="${form.id != null}"> <a href="/ingredient/add" class="btn btn-secondary  ">Add more</a> </c:if>
             </div>
         </form>
     </div>

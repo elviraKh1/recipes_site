@@ -1,13 +1,13 @@
 package recipes.casestudy.service;
 
 import lombok.extern.slf4j.Slf4j;
-import recipes.casestudy.database.dao.UserDAO;
-import recipes.casestudy.database.entity.User;
-import recipes.casestudy.formbean.RegisterUserFormBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import recipes.casestudy.database.dao.UserDAO;
+import recipes.casestudy.database.entity.User;
+import recipes.casestudy.formbean.RegisterUserFormBean;
 
 import java.util.Date;
 

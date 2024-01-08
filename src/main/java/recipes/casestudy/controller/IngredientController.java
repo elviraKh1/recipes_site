@@ -101,30 +101,34 @@ public class IngredientController {
         return response;
     }
 
-//    @GetMapping("/ingredient/search")
-//    public ModelAndView searchIngredient(@RequestParam(required = false) String search) {
-//        ModelAndView response = new ModelAndView("ingredient/all");
-//        log.debug("######################### Search ingredient with " + search + " #########################");
-//        List<Ingredient> ingredients;
-//        if (!StringUtils.isEmpty(search)) {
-//            search = "%" + search + "%";
-//            ingredients = ingredientDAO.findByName(search);
-//            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + ingredients.toString());
-//        } else {
-//            ingredients = ingredientDAO.findAll();
-//            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + ingredients.toString());
-//        }
-//
-//        response.addObject("ingredients", ingredients);
-//        return response;
-//    }
-
     @GetMapping("/ingredient/search")
-    public ModelAndView searchIngredient(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                       @RequestParam(defaultValue = "2", required = false) Integer size
+    public ModelAndView searchIngredient(@RequestParam(required = false) String search,
+                                         @RequestParam(defaultValue = "0", required = false) Integer page,
+                                         @RequestParam(defaultValue = "10", required = false) Integer size) {
+        ModelAndView response = new ModelAndView("ingredient/search");
+        log.debug("######################### Search ingredient with " + search + " #########################");
+        Page<Ingredient> ingredients;
+        Pageable paging = PageRequest.of(page, size);
+        if (!StringUtils.isEmpty(search)) {
+            search = "%" + search + "%";
+            ingredients = ingredientDAO.findByNameLikeIgnoreCase(search, paging);
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + ingredients.toString());
+        } else {
+            ingredients = ingredientDAO.findAll(paging);
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + ingredients.toString());
+        }
+
+        response.addObject("ingredients", ingredients);
+        return response;
+    }
+
+    @GetMapping("/ingredient/all")
+    public ModelAndView allIngredient(
+                                         @RequestParam(defaultValue = "0", required = false) Integer page,
+                                         @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
-        ModelAndView response = new ModelAndView("/ingredient/search");
-        log.debug("######################### All ingredients with " + " #########################");
+        ModelAndView response = new ModelAndView("ingredient/search");
+        log.debug("######################### Search all ingredients  " + " #########################");
         Pageable paging = PageRequest.of(page, size);
         Page<Ingredient> ingredients = ingredientDAO.findAll(paging);
 
@@ -132,51 +136,22 @@ public class IngredientController {
         return response;
     }
 
-    @RequestMapping(value={"/recipe/ingredientAutocomplete","/recipe/edit/ingredientAutocomplete"})
+    @RequestMapping(value = {"/recipe/ingredientAutocomplete", "/recipe/edit/ingredientAutocomplete"})
     @ResponseBody
-    public List<LabelValueAutocompleteBean> ingredientAutocomplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
+    public List<LabelValueAutocompleteBean> ingredientAutocomplete(@RequestParam(value = "term", required = false, defaultValue = "") String term) {
         List<LabelValueAutocompleteBean> suggestions = new ArrayList<>();
-        log.debug("######################### All ingredients with " + term+ " #########################");
-        List<Ingredient>  ingredients=new ArrayList<>();
+        log.debug("######################### All ingredients with " + term + " #########################");
+        List<Ingredient> ingredients = new ArrayList<>();
 
         if (!StringUtils.isEmpty(term)) {
             term = "%" + term + "%";
             ingredients = ingredientDAO.findByNameLikeIgnoreCase(term);
-            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ find " + ingredients.size()+" ingredients");
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ find " + ingredients.size() + " ingredients");
         }
         for (Ingredient ingredient : ingredients) {
-                    LabelValueAutocompleteBean lv= new LabelValueAutocompleteBean(ingredient.getId(),ingredient.getName());
-                    suggestions.add(lv);
-            }
+            LabelValueAutocompleteBean lv = new LabelValueAutocompleteBean(ingredient.getId(), ingredient.getName());
+            suggestions.add(lv);
+        }
         return suggestions;
     }
-//    @RequestMapping(value="/plantNamesAutocomplete")
-//    @ResponseBody
-//    public List<LabelValueDTO> plantNamesAutocomplete(@RequestParam(value="term", required = false, defaultValue="") String term)  {
-//        List<LabelValueDTO> suggestions = new ArrayList<LabelValueDTO>();
-//        try {
-//            // only update when term is three characters.
-//            if (term.length() == 3) {
-//                firstThreeCharacters = term;
-//                allPlants = specimenService.fetchPlants(term);
-//            }
-//
-//            for (PlantDTO plantDTO : allPlants) {
-//                if (plantDTO.toString().contains(term)) {
-//                    LabelValueDTO lv = new LabelValueDTO();
-//                    lv.setLabel(plantDTO.toString());
-//                    lv.setValue(Integer.toString(plantDTO.getGuid()));
-//                    suggestions.add(lv);
-//                }
-//            }
-//        } catch (Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//            log.error("Exception in autocomplete", e);
-//        }
-//
-//        return suggestions;
-//
-//    }
-
 }

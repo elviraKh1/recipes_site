@@ -2,10 +2,6 @@ package recipes.casestudy.sequirity;
 
 
 import lombok.extern.slf4j.Slf4j;
-import recipes.casestudy.database.dao.UserDAO;
-import recipes.casestudy.database.dao.UserRoleDAO;
-import recipes.casestudy.database.entity.User;
-import recipes.casestudy.database.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import recipes.casestudy.database.dao.UserDAO;
+import recipes.casestudy.database.dao.UserRoleDAO;
+import recipes.casestudy.database.entity.User;
+import recipes.casestudy.database.entity.UserRole;
 
 import java.util.ArrayList;
 import java.util.Collection;

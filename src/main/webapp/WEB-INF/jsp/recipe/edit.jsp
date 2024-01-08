@@ -41,11 +41,15 @@
                         </c:if>
                     </div>
                     <div class="col-lg-12 col-md-6">
-                        <label for="category" class="form-label"  >Category  </label>
-                        <select  class="form-control" id="category" name="category" aria-describedby="categoryNameHelp">
-                            <option value="Breakfast"  <c:if test="${form.category eq 'Breakfast'}" >selected</c:if>>Breakfast</option>
-                            <option value="Lunch" <c:if test="${form.category eq 'Lunch'}" >selected</c:if>>Lunch</option>
-                            <option value="Dinner" <c:if test="${form.category eq 'Dinner'}" >selected</c:if>>Dinner</option>
+                        <label for="category" class="form-label">Category </label>
+                        <select class="form-control" id="category" name="category" aria-describedby="categoryNameHelp">
+                            <option value="Breakfast" <c:if test="${form.category eq 'Breakfast'}">selected</c:if>>
+                                Breakfast
+                            </option>
+                            <option value="Lunch" <c:if test="${form.category eq 'Lunch'}">selected</c:if>>Lunch
+                            </option>
+                            <option value="Dinner" <c:if test="${form.category eq 'Dinner'}">selected</c:if>>Dinner
+                            </option>
                         </select>
 
                         <div id="categoryNameHelp" class="form-text">Choose category name.</div>
@@ -76,12 +80,12 @@
                     </div>
 
                     <div class="col-lg-12 col-md-6">
-                        <img src="${form.imageUrl}"    style="width: 280px;">
+                        <img src="${form.imageUrl}" style="width: 280px;">
                     </div>
                     <div class="col-lg-12 col-md-6">
                         <label for="image_url" class="form-label">image</label>
                         <input type="file" class="form-control" id="image_url" name="imageFile"
-                               aria-describedby="imageUrlHelp" >
+                               aria-describedby="imageUrlHelp">
                         <div id="imageUrlHelp" class="form-text">image_url</div>
                         <c:if test="${errors.hasFieldErrors('imageFile')}">
                             <div style="color:red">

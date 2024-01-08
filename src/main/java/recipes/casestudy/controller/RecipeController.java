@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import recipes.casestudy.database.dao.IngredientDAO;
 import recipes.casestudy.database.dao.RecipeDAO;
@@ -29,7 +30,6 @@ import recipes.casestudy.service.RecipeService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -77,7 +77,7 @@ public class RecipeController {
             form.setId(recipe.getId());
 
 
-            for (RecipeIngredient recipeIngredient: ingredients) {
+            for (RecipeIngredient recipeIngredient : ingredients) {
                 RecipeIngredientFormBean ingredientFormBean = new RecipeIngredientFormBean();
                 ingredientFormBean.setId(recipeIngredient.getIngredient().getId());
                 ingredientFormBean.setName(recipeIngredient.getIngredient().getName());
@@ -96,8 +96,8 @@ public class RecipeController {
 
     @PostMapping("/recipe/submit")
     public ModelAndView submitRecipe(//@RequestParam("image_url") MultipartFile imageFile,
-                                      @Valid RecipeFormBean form,
-                                      BindingResult bindingResult) {
+                                     @Valid RecipeFormBean form,
+                                     BindingResult bindingResult) {
         ModelAndView response = new ModelAndView("recipe/edit");
 
         log.debug("######################### In submit recipe with args #########################");
@@ -106,7 +106,7 @@ public class RecipeController {
 
         List<RecipeIngredientFormBean> ingredientFormBeans = form.getIngredientsInp();
         if (ingredientFormBeans != null) {
-            ingredientFormBeans.removeIf(ingredientFormBean ->ingredientFormBean.getId()==null);
+            ingredientFormBeans.removeIf(ingredientFormBean -> ingredientFormBean.getId() == null);
             for (RecipeIngredientFormBean ingredientFormBean : ingredientFormBeans) {
                 Ingredient ingredient = ingredientDAO.findById(ingredientFormBean.getId());
                 if (ingredient == null) {
@@ -178,7 +178,7 @@ public class RecipeController {
         Pageable paging = PageRequest.of(page, size);
 
         if (!StringUtils.isEmpty(search)) {
-            search = "%" + search + "%";
+            search = "%" + search.toLowerCase() + "%";
             recipes = recipeDAO.findByNameOrInstructions(search, paging);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
         } else {
@@ -196,8 +196,8 @@ public class RecipeController {
 
     @GetMapping("/recipe/category")
     public ModelAndView searchRecipeByCategory(@RequestParam(required = false) String c,
-                                     @RequestParam(defaultValue = "0", required = false) Integer page,
-                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
+                                               @RequestParam(defaultValue = "0", required = false) Integer page,
+                                               @RequestParam(defaultValue = "6", required = false) Integer size) {
         ModelAndView response = new ModelAndView("index");
         log.debug("######################### Search recipe with category" + c + " #########################");
         Page<Recipe> recipes;
@@ -208,7 +208,7 @@ public class RecipeController {
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
         } else {
             recipes = recipeDAO.findAll(paging);
-            category ="";
+            category = "";
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
         }
 

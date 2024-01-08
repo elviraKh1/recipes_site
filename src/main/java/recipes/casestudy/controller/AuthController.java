@@ -3,17 +3,17 @@ package recipes.casestudy.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import recipes.casestudy.database.dao.UserDAO;
-import recipes.casestudy.database.entity.User;
-import recipes.casestudy.formbean.RegisterUserFormBean;
-import recipes.casestudy.sequirity.AuthenticatedUserService;
-import recipes.casestudy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import recipes.casestudy.database.dao.UserDAO;
+import recipes.casestudy.database.entity.User;
+import recipes.casestudy.formbean.RegisterUserFormBean;
+import recipes.casestudy.sequirity.AuthenticatedUserService;
+import recipes.casestudy.service.UserService;
 
 @Slf4j
 @Controller

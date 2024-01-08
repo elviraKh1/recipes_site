@@ -114,12 +114,15 @@
     <div class="container-fluid">
         <a href="/" class="navbar-brand me-auto me-lg-0"> The magic porridge pot </a>
         <ul class="navbar-nav ">
+            <li class="nav-item">
+                <a class="nav-link" href="/ingredient/all">Ingredients</a>
+            </li>
             <sec:authorize access="hasAnyAuthority('ADMIN', 'MEMBER')">
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/index">Admin</a>
+                    <a class="nav-link" href="/ingredient/add">Create Ingredient</a></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/ingredient/add">Create Ingredient</a></a>
+                    <a class="nav-link" href="/admin/index">Admin</a>
                 </li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">

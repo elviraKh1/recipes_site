@@ -2,8 +2,6 @@ package recipes.casestudy.sequirity;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import recipes.casestudy.database.dao.UserDAO;
-import recipes.casestudy.database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +10,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
+import recipes.casestudy.database.dao.UserDAO;
+import recipes.casestudy.database.entity.User;
 
 @Slf4j
 @Component

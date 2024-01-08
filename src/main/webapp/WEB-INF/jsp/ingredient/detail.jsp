@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
-                                <a href='/ingredient/edit/${ingredient.id}' class='btn btn-primary '>Edit</a>
+                                <a href='/ingredient/edit/${ingredient.id}' class='btn btn-secondary '>Edit</a>
                             </div>
                         </div>
                     </div>

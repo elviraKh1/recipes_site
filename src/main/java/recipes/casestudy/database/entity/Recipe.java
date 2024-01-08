@@ -3,7 +3,6 @@ package recipes.casestudy.database.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,8 +44,7 @@ public class Recipe {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients)
-    {
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
         this.recipeIngredients.addAll(recipeIngredients);
     }
 
