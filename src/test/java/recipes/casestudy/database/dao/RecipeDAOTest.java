@@ -25,7 +25,8 @@ public class RecipeDAOTest {
     @Autowired
     private UserDAO userDAO;
 
-    @CsvSource({"Chiken pie , Ullamco laboris nisi ut aliquip ex ea commodo consequat, test.jpg ,Breakfast ,08/01/2024"})
+    @CsvSource({"Chiken pie , Ullamco laboris nisi ut aliquip ex ea commodo consequat, test.jpg ,Breakfast ,08/01/2024",
+                "Sweet Mustard Pecan Salmon , Preheat Oven to 400 degrees Step 2 Line a baking pan with parchment paper, test3.jpg ,Lunch ,09/01/2024",})
     @ParameterizedTest
     @Order(1)
     public void createRecipeTest(String name, String instructions, String imageUrl, String category, String dateStr) throws ParseException {
@@ -56,7 +57,8 @@ public class RecipeDAOTest {
 
 
     @ParameterizedTest
-    @CsvSource({"Chiken pie ,Ullamco laboris nisi ut aliquip ex ea commodo consequat"})
+    @CsvSource({"Chiken pie ,Ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                "Sweet Mustard Pecan Salmon , Preheat Oven to 400 degrees Step 2 Line a baking pan with parchment paper"})
     @Order(2)
     public void findRecipeByByNameAndInstructionsTest(String name, String instructions) {
         //when
@@ -72,7 +74,8 @@ public class RecipeDAOTest {
 
 
     @ParameterizedTest
-    @CsvSource({"Chiken pie, Ullamco laboris nisi ut aliquip ex ea commodo consequat"})
+    @CsvSource({"Chiken pie, Ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "Sweet Mustard Pecan Salmon , Preheat Oven to 400 degrees Step 2 Line a baking pan with parchment paper"})
     @Order(3)
     public void deleteRecipeByNameAndInstructionsTest(String name, String instructions) {
         List<Recipe> recipes = recipeDAO.findByNameAndInstructions(name, instructions);
@@ -86,7 +89,8 @@ public class RecipeDAOTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"Chiken pie, Ullamco laboris nisi ut aliquip ex ea commodo consequat"})
+    @CsvSource({"Chiken pie, Ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "Sweet Mustard Pecan Salmon , Preheat Oven to 400 degrees Step 2 Line a baking pan with parchment paper"})
     @Order(4)
     public void shouldNotExistRecipeTest(String name, String instructions) {
         //when

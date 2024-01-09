@@ -25,7 +25,7 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
             "and (LOWER(i.name) like :word or LOWER(r.name) like :word or LOWER(r.instructions) like :word )")
     Page<Recipe> findByNameOrInstructions(String word, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "select r.* from recipes r where LOWER(r.name) like :name or LOWER(r.instructions) like :instructions ")
+    @Query(nativeQuery = true, value = "select r.* from recipes r where r.name like :name and r.instructions like :instructions ")
     List<Recipe> findByNameAndInstructions(String name, String instructions);
 
     Page<Recipe> findByAuthorId(Integer authorId, Pageable pageable);
