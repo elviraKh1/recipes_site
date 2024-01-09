@@ -95,14 +95,11 @@ public class RecipeController {
     }
 
     @PostMapping("/recipe/submit")
-    public ModelAndView submitRecipe(//@RequestParam("image_url") MultipartFile imageFile,
-                                     @Valid RecipeFormBean form,
+    public ModelAndView submitRecipe(@Valid RecipeFormBean form,
                                      BindingResult bindingResult) {
         ModelAndView response = new ModelAndView("recipe/edit");
 
         log.debug("######################### In submit recipe with args #########################");
-//        log.debug(" In fileupload name " + imageFile.getName());
-//        log.debug(" In fileupload size " + imageFile.getSize());
 
         List<RecipeIngredientFormBean> ingredientFormBeans = form.getIngredientsInp();
         if (ingredientFormBeans != null) {

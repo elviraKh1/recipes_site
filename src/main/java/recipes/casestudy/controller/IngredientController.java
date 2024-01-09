@@ -33,8 +33,6 @@ public class IngredientController {
     @Autowired
     private IngredientService ingredientService;
 
-    @Autowired
-    private AuthenticatedUserService authenticatedUserService;
 
     @GetMapping("/ingredient/add")
     public ModelAndView createIngredient() {

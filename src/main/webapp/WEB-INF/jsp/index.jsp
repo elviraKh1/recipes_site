@@ -34,9 +34,8 @@
                     <c:forEach items="${recipes.getContent()}" var="recipe" >
                         <div class="col-lg-4 recipes-item  justify-content-center pt-3  " style="background-color: #eeeeee ; border-radius: 10px;">
                             <h4 style="height: 70px;  ">${recipe.name}</h4>
-                            <a href="/recipe/detail/?id=${recipe.id}" class="glightbox" ><img
-                                    src="${recipe.imageUrl}" class="recipes-img img-recipes-item" alt=""></a>
-
+                            <a href="/recipe/detail/?id=${recipe.id}" class="glightbox" >
+                                <img src="<c:if test="${recipe.imageUrl== null || recipe.imageUrl eq ''}">../../pub/images/empyImage.jpg</c:if>${recipe.imageUrl}" class="recipes-img img-recipes-item" alt=""></a>
 
                             <a href="/recipe/detail/?id=${recipe.id}">
                                 <button type="button" class="btn btn-outline-secondary">Detail</button>

@@ -27,7 +27,6 @@ public class IngredientService {
         if (ingredient == null) {
             ingredient = new Ingredient();
         }
-        User user = authenticatedUserService.loadCurrentUser();
         ingredient.setName(form.getName());
 
         return ingredientDAO.save(ingredient);
