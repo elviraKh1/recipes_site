@@ -3,11 +3,13 @@ package recipes.casestudy.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -35,6 +37,15 @@ public class ErrorController {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ModelAndView missingRequestParameterException(HttpServletRequest request, Exception ex) {
+        ModelAndView response = new ModelAndView("error/404");
+
+        log.warn("User requested url that they do not have important request parameters " + request.getRequestURL());
+
+        return response;
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ModelAndView requestRejectedExceptionException(HttpServletRequest request, Exception ex) {
         ModelAndView response = new ModelAndView("error/404");
 
         log.warn("User requested url that they do not have important request parameters " + request.getRequestURL());

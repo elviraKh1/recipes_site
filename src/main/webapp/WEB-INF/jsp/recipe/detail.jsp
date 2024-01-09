@@ -45,6 +45,11 @@
                     <a href='/recipe/edit/${recipe.id}' class='btn btn-secondary'>Edit</a>
                 </c:if>
             </sec:authorize>
+            <sec:authorize access="hasAnyAuthority('ADMIN')">
+                <a href="/recipe/delete/?id=${recipe.id}">
+                    <button type="button" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
+                </a>
+            </sec:authorize>
         </div>
     </div>
 </section>

@@ -40,15 +40,16 @@
                             <a href="/recipe/detail/?id=${recipe.id}">
                                 <button type="button" class="btn btn-outline-secondary">Detail</button>
                             </a>
-                            <a href="/recipe/detail/?id=${recipe.id}">
-                                <button type="button" class="btn btn-outline-secondary ">Bookmark</button>
-                            </a>
+<%--                            <a href="/recipe/detail/?id=${recipe.id}">--%>
+<%--                                <button type="button" disabled class="btn btn-outline-secondary ">Bookmark</button>--%>
+<%--                            </a>--%>
                             <sec:authorize access="isAuthenticated()">
                                 <c:if test="${user != null && recipe.authorId == user.id}">
                                     <a href="/recipe/delete/?id=${recipe.id}">
-                                        <button type="button" class="btn btn-outline-secondary">Delete</button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
                                     </a>
                                 </c:if>
+
                             </sec:authorize>
                         </div>
                     </c:forEach>

@@ -26,11 +26,11 @@
             <nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item <c:if test="${!recipes.hasPrevious()}">disabled</c:if> ">
-                        <a class="page-link"  href="/recipe/my?page=${recipes.getNumber()-1}">Prev</a>
+                        <a class="page-link"  href="/recipe/ny?page=${recipes.getNumber()-1}">Prev</a>
 
                     </li>
-                    <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if> "><a class="page-link"
-                                                                                                     href="/recipe/my?page=${recipes.getNumber()+1}">Next</a>
+                    <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if>  "><a class="page-link"
+                                                                                                     href="/recipe/ny?page=${recipes.getNumber()+1}">Next</a>
                     </li>
                 </ul>
             </nav>

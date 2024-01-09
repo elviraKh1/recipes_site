@@ -190,6 +190,24 @@ public class RecipeController {
         return response;
     }
 
+    @GetMapping("/recipe/searchByIng")
+    public ModelAndView searchRecipesByIngredient(@RequestParam(required = true) Integer ingredientid,
+                                     @RequestParam(defaultValue = "0", required = false) Integer page,
+                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
+        ModelAndView response = new ModelAndView("index");
+        log.debug("######################### Search recipe with  by one ingredient with id " + ingredientid + " #########################");
+        Page<Recipe> recipes;
+        Pageable paging = PageRequest.of(page, size);
+
+        recipes = recipeDAO.findRecipeByIngredientId(ingredientid, paging);
+        User user = authenticatedUserService.loadCurrentUser();
+
+        response.addObject("user", user);
+        response.addObject("recipes", recipes);
+        return response;
+    }
+
+
     @GetMapping("/recipe/ny")
     public ModelAndView myRecipes(   @RequestParam(defaultValue = "0", required = false) Integer page,
                                      @RequestParam(defaultValue = "6", required = false) Integer size) {

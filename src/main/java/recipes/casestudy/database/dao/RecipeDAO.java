@@ -30,6 +30,9 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findByAuthorId(Integer authorId, Pageable pageable);
 
+    @Query(nativeQuery = true, value ="select r.*  from Recipes r, Recipe_Ingredients ri where r.id = ri.recipe_id and ri.ingredient_id = :id")
+    Page<Recipe> findRecipeByIngredientId(Integer id, Pageable pageable);
+
     @Query("SELECT q FROM Recipe q where q.category = :category")
     Page<Recipe> findByCategoryIgnoreCase(String category, Pageable pageable);
 

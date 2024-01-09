@@ -35,7 +35,7 @@
             <table class='table  table-striped table-hover'>
                 <c:forEach items="${ingredients.getContent()}" var="ingredient">
                     <tr>
-                        <td>${ingredient.name}</td>
+                        <td><a href="/recipe/searchByIng?ingredientid=${ingredient.id}">${ingredient.name}</a></td>
                         <sec:authorize access="hasAnyAuthority('ADMIN')">
                             <td><a href="/ingredient/edit/${ingredient.id}">Edit</a></td>
                         </sec:authorize>
