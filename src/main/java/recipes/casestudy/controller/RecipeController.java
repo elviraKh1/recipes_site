@@ -178,7 +178,7 @@ public class RecipeController {
         Pageable paging = PageRequest.of(page, size);
 
         if (!StringUtils.isEmpty(search)) {
-            search = "%" + search.toLowerCase() + "%";
+            search = "%" + search.toLowerCase().trim() + "%";
             recipes = recipeDAO.findByNameOrInstructions(search, paging);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
         } else {
@@ -187,6 +187,22 @@ public class RecipeController {
         }
 
         User user = authenticatedUserService.loadCurrentUser();
+        response.addObject("user", user);
+
+        response.addObject("recipes", recipes);
+        return response;
+    }
+
+    @GetMapping("/recipe/ny")
+    public ModelAndView myRecipes(   @RequestParam(defaultValue = "0", required = false) Integer page,
+                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
+        ModelAndView response = new ModelAndView("recipe/ny");
+        Page<Recipe> recipes;
+        Pageable paging = PageRequest.of(page, size);
+
+        User user = authenticatedUserService.loadCurrentUser();
+        recipes = recipeDAO.findByAuthorId(user.getId(), paging);
+
         response.addObject("user", user);
 
         response.addObject("recipes", recipes);
@@ -204,7 +220,7 @@ public class RecipeController {
         Pageable paging = PageRequest.of(page, size);
         String category = c;
         if (!StringUtils.isEmpty(c)) {
-            recipes = recipeDAO.findByCategoryIgnoreCase(c, paging);
+            recipes = recipeDAO.findByCategoryIgnoreCase(c.trim(), paging);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
         } else {
             recipes = recipeDAO.findAll(paging);

@@ -15,6 +15,7 @@ public class UserRole {
     private Integer id;
 
     @Column(name = "user_id")
+
     private Integer userId;
 
     @Column(name = "role_name")

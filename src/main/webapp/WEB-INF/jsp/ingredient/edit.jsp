@@ -4,7 +4,7 @@
     <div class="bg-light2 pt-5 pb-5">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="m-0">Create Ingredient</h2>
+                <h2 class="m-0">  Ingredient</h2>
             </div>
         </div>
     </div>
@@ -41,7 +41,6 @@
             </div>
             <div class="mt-3">
                 <button type="submit" class="btn btn-secondary">Submit</button>
-                <c:if test="${form.id != null}"> <a href="/ingredient/show/?id=${form.id}" class="btn btn-secondary  ">View</a> </c:if>
                 <c:if test="${form.id != null}"> <a href="/ingredient/add" class="btn btn-secondary  ">Add more</a> </c:if>
             </div>
         </form>

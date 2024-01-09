@@ -37,6 +37,18 @@
                         </c:if>
                     </div>
                     <div class="col-lg-12 col-md-6">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" aria-describedby="nameNameHelp"
+                               value="${form.name}" placeholder="Your name">
+                        <c:if test="${errors.hasFieldErrors('name')}">
+                            <div style="color:red">
+                                <c:forEach items="${errors.getFieldErrors('name')}" var="error">
+                                    ${error.defaultMessage}<br>
+                                </c:forEach>
+                            </div>
+                        </c:if>
+                    </div>
+                    <div class="col-lg-12 col-md-6">
                         <label for="password" class="form-label">Password</label>
                         <input type="text" class="form-control" id="password" name="password"
                                aria-describedby="passwordHelp"

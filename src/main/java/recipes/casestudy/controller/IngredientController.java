@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -103,14 +104,17 @@ public class IngredientController {
 
     @GetMapping("/ingredient/search")
     public ModelAndView searchIngredient(@RequestParam(required = false) String search,
+                                         @RequestParam(required = false) String sorting,
                                          @RequestParam(defaultValue = "0", required = false) Integer page,
                                          @RequestParam(defaultValue = "10", required = false) Integer size) {
         ModelAndView response = new ModelAndView("ingredient/search");
         log.debug("######################### Search ingredient with " + search + " #########################");
+
         Page<Ingredient> ingredients;
-        Pageable paging = PageRequest.of(page, size);
+        Pageable paging = processSorting(sorting, page, size);
+
         if (!StringUtils.isEmpty(search)) {
-            search = "%" + search + "%";
+            search = "%" + search.trim() + "%";
             ingredients = ingredientDAO.findByNameLikeIgnoreCase(search, paging);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + ingredients.toString());
         } else {
@@ -122,10 +126,26 @@ public class IngredientController {
         return response;
     }
 
+    private Pageable processSorting(String sorting, Integer page, Integer size) {
+        Sort sort = null;
+        if (sorting != null) {
+            if (sorting.equals("asc")) {
+                sort = Sort.by(Sort.Order.asc("name").ignoreCase());
+            } else if (sorting.equals("desc"))
+                sort = Sort.by(Sort.Order.desc("name").ignoreCase());
+        }
+
+        if (sort != null) {
+            return PageRequest.of(page, size, sort);
+        }
+        return PageRequest.of(page, size);
+    }
+
+
     @GetMapping("/ingredient/all")
     public ModelAndView allIngredient(
-                                         @RequestParam(defaultValue = "0", required = false) Integer page,
-                                         @RequestParam(defaultValue = "10", required = false) Integer size
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
         ModelAndView response = new ModelAndView("ingredient/search");
         log.debug("######################### Search all ingredients  " + " #########################");
@@ -144,7 +164,7 @@ public class IngredientController {
         List<Ingredient> ingredients = new ArrayList<>();
 
         if (!StringUtils.isEmpty(term)) {
-            term = "%" + term + "%";
+            term = "%" + term.trim() + "%";
             ingredients = ingredientDAO.findByNameLikeIgnoreCase(term);
             log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ find " + ingredients.size() + " ingredients");
         }
