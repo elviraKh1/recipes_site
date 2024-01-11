@@ -199,10 +199,10 @@ public class RecipeController {
         if (!StringUtils.isEmpty(search)) {
             search = "%" + search.toLowerCase().trim() + "%";
             recipes = recipeDAO.findByNameOrInstructions(search, paging);
-            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + search);
         } else {
             recipes = recipeDAO.findAll(paging);
-            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
+            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + search);
         }
 
         User user = authenticatedUserService.loadCurrentUser();

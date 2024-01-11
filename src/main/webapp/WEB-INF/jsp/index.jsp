@@ -4,18 +4,20 @@
 <jsp:include page="include/header.jsp"/>
 
 <section id="recipes" class="recipes">
-    <div class="container"  >
+    <div class="container">
 
         <ul class="nav justify-content-center  nav-underline">
             <li class="nav-item">
-                <a class="nav-link <c:if test="${category eq ''}" >active</c:if>" aria-current="page" href="/"><h4>All</h4></a>
+                <a class="nav-link <c:if test="${category eq ''}" >active</c:if>" aria-current="page" href="/"><h4>
+                    All</h4></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <c:if test="${category eq 'Breakfast'}" >active</c:if>" aria-current="page"
                    href="/recipe/category?c=Breakfast"><h4>Breakfast</h4></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <c:if test="${category eq 'Lunch'}" >active</c:if>" href="/recipe/category?c=Lunch"><h4>Lunch</h4></a>
+                <a class="nav-link <c:if test="${category eq 'Lunch'}" >active</c:if>" href="/recipe/category?c=Lunch">
+                    <h4>Lunch</h4></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <c:if test="${category eq 'Dinner'}" >active</c:if>"
@@ -25,46 +27,71 @@
 
         <c:if test="${not empty recipes}">
 
-            <h6 class="pt-3" style="color: #49beb7">Recipes found ${recipes.getTotalElements()} <c:if test="${param['search'] != null}">. Search word is (${param['search']})</c:if></h6>
+            <h6 class="pt-3" style="color: #49beb7">
+                Recipes found ${recipes.getTotalElements()} <c:if
+                    test="${param['search'] != null}">. Search word is (${param['search']})</c:if></h6>
 
-        <div class="row"  >
-            <div class="tab-content" style="  width: 100%" >
-                <div class="row gy-4  text-center" >
+            <div class="row">
+                <div class="tab-content" style="  width: 100%">
+                    <div class="row gy-4  text-center">
 
-                    <c:forEach items="${recipes.getContent()}" var="recipe" >
-                        <div class="col-lg-4 recipes-item  justify-content-center pt-3  " style="background-color: #eeeeee ; border-radius: 10px;">
-                            <h4 style="height: 70px;  ">${recipe.name}</h4>
-                            <a href="/recipe/detail/?id=${recipe.id}" class="glightbox" >
-                                <img src="<c:if test="${recipe.imageUrl== null || recipe.imageUrl eq ''}">../../pub/images/empyImage.jpg</c:if>${recipe.imageUrl}" class="recipes-img img-recipes-item" alt=""></a>
+                        <c:forEach items="${recipes.getContent()}" var="recipe">
+                            <div class="col-lg-4 recipes-item  justify-content-center pt-3  "
+                                 style="background-color: #eeeeee ; border-radius: 10px;">
+                                <h4 style="height: 70px;  ">${recipe.name}</h4>
+                                <a href="/recipe/detail/?id=${recipe.id}" class="glightbox">
+                                    <img src="<c:if test="${recipe.imageUrl== null || recipe.imageUrl eq ''}">../../pub/images/empyImage.jpg</c:if>${recipe.imageUrl}"
+                                         class="recipes-img img-recipes-item" alt=""></a>
 
-                            <a href="/recipe/detail/?id=${recipe.id}">
-                                <button type="button" class="btn btn-outline-secondary">Detail</button>
-                            </a>
-                            <sec:authorize access="isAuthenticated()">
-                                <c:if test="${user != null && recipe.authorId == user.id}">
-                                    <a href="/recipe/delete/?id=${recipe.id}">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
-                                    </a>
-                                </c:if>
+                                <a href="/recipe/detail/?id=${recipe.id}">
+                                    <button type="button" class="btn btn-outline-secondary">Detail</button>
+                                </a>
+                                <sec:authorize access="isAuthenticated()">
+                                    <c:if test="${user != null && recipe.authorId == user.id}">
+                                        <a href="/recipe/delete/?id=${recipe.id}">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="return confirm('Are you sure you want to delete this recipe?')">
+                                                Delete
+                                            </button>
+                                        </a>
+                                    </c:if>
 
-                            </sec:authorize>
-                        </div>
-                    </c:forEach>
+                                </sec:authorize>
+                            </div>
+                        </c:forEach>
 
+                    </div>
                 </div>
             </div>
-        </div>
         </c:if>
 
     </div>
 </section>
 <nav>
     <ul class="pagination justify-content-center">
+        <c:if test="${param['c'] != null}">
+        <li class="page-item <c:if test="${!recipes.hasPrevious()}">disabled</c:if> "><a class="page-link"
+                                                                                         href="/recipe/category?page=${recipes.getNumber()-1}&c=${param['c']}">Prev</a>
+        </li>
+        <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if> "><a class="page-link"
+                                                                                     href="/recipe/category?page=${recipes.getNumber()+1}&c=${param['c']}">Next</a>
+            </c:if>
+            <c:if test="${param['search'] != null}">
+        <li class="page-item <c:if test="${!recipes.hasPrevious()}">disabled</c:if> "><a class="page-link"
+                                                                                         href="/recipe/search?page=${recipes.getNumber()-1}&search=${param['search']}">Prev</a>
+        </li>
+        <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if> "><a class="page-link"
+                                                                                     href="/recipe/search?page=${recipes.getNumber()+1}&search=${param['search']}">Next</a>
+            </c:if>
+
+            <c:if test="${param['c'] ==null and param['search']==null}">
         <li class="page-item <c:if test="${!recipes.hasPrevious()}">disabled</c:if> "><a class="page-link"
                                                                                          href="/?page=${recipes.getNumber()-1}">Prev</a>
         </li>
         <li class="page-item <c:if test="${!recipes.hasNext()}">disabled</c:if> "><a class="page-link"
                                                                                      href="/?page=${recipes.getNumber()+1}">Next</a>
+            </c:if>
+
         </li>
     </ul>
 </nav>

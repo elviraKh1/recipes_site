@@ -20,9 +20,10 @@ public interface RecipeDAO extends JpaRepository<Recipe, Long> {
     @Transactional
     int deleteById(Integer id);
 
-    @Query("select r  from Recipe r, RecipeIngredient ri, Ingredient i  " +
-            "where r.id = ri.recipe.id and ri.ingredient.id=i.id " +
-            "and (LOWER(i.name) like :word or LOWER(r.name) like :word or LOWER(r.instructions) like :word )")
+    @Query("SELECT DISTINCT r FROM Recipe r "+
+    " LEFT JOIN RecipeIngredient  ri ON r.id = ri.recipe.id "+
+    " LEFT JOIN Ingredient i ON ri.ingredient.id = i.id WHERE "+
+    " LOWER(i.name) LIKE :word     OR LOWER(r.name) LIKE :word OR LOWER(r.instructions) LIKE :word")
     Page<Recipe> findByNameOrInstructions(String word, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select r.* from recipes r where r.name like :name and r.instructions like :instructions ")

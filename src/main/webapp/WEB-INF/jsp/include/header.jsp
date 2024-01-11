@@ -41,9 +41,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/ingredient/add">Create Ingredient</a></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/index">Admin</a>
-                </li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
