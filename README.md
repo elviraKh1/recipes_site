@@ -35,6 +35,7 @@ This Java Spring Boot capstone project implements a Recipe's Site, featuring var
 2. **Authorized User:**
     - Can view and search recipes and ingredients.
     - Can create/edit/delete own recipes.
+    - Can bookmark any recipe and view them in favorite list  
     - Has access to a page displaying their own recipes.
 
 3. **Admin User:**
