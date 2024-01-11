@@ -68,10 +68,13 @@ public class RecipeService {
     }
 
     private Recipe saveImage(MultipartFile imageFile, Recipe recipe) {
-        File f = new File("./src/main/webapp/pub/images/" + imageFile.getOriginalFilename());
+        if (imageFile.isEmpty())
+            return recipe;
+        String filename = System.currentTimeMillis()+imageFile.getOriginalFilename();
+        File f = new File("./src/main/webapp/pub/images/" + filename);
         try (OutputStream outputStream = new FileOutputStream(f.getAbsolutePath())) {
             IOUtils.copy(imageFile.getInputStream(), outputStream);
-            recipe.setImageUrl("/pub/images/" + imageFile.getOriginalFilename());
+            recipe.setImageUrl("/pub/images/" + filename);
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
@@ -83,7 +86,7 @@ public class RecipeService {
             File f = new File("./src/main/webapp" + recipe.getImageUrl());
             f.delete();
         } catch (Exception e) {
-            log.info("Error during delete file " + recipe.getImageUrl());
+            log.info("Error during delete file " + recipe);
             log.debug(e.getMessage());
         }
     }

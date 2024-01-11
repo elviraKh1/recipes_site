@@ -40,9 +40,6 @@
                             <a href="/recipe/detail/?id=${recipe.id}">
                                 <button type="button" class="btn btn-outline-secondary">Detail</button>
                             </a>
-<%--                            <a href="/recipe/detail/?id=${recipe.id}">--%>
-<%--                                <button type="button" disabled class="btn btn-outline-secondary ">Bookmark</button>--%>
-<%--                            </a>--%>
                             <sec:authorize access="isAuthenticated()">
                                 <c:if test="${user != null && recipe.authorId == user.id}">
                                     <a href="/recipe/delete/?id=${recipe.id}">

@@ -44,6 +44,12 @@ public class Recipe {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
+    @OneToMany(mappedBy = "recipe",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<BookmarkRecipe> bookmarkRecipes;
+
+
     public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
         this.recipeIngredients.addAll(recipeIngredients);
     }

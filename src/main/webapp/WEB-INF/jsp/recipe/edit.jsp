@@ -86,7 +86,7 @@
                         <label for="image_url" class="form-label">image</label>
                         <input type="file" class="form-control" id="image_url" name="imageFile"
                                aria-describedby="imageUrlHelp">
-                        <div id="imageUrlHelp" class="form-text">image_url</div>
+                        <div id="imageUrlHelp" class="form-text">Image</div>
                         <c:if test="${errors.hasFieldErrors('imageFile')}">
                             <div style="color:red">
                                 <c:forEach items="${errors.getFieldErrors('imageFile')}" var="error">
@@ -114,7 +114,7 @@
                         </c:forEach>
 
                     </div>
-                    <button type="button" onclick="addFields()">add ingredient</button>
+                    <button type="button" onclick="addFields()">Add ingredient</button>
 
                     <div class="text-center pb-3">
                         <button type="submit" class="btn btn-secondary  ">Save</button>

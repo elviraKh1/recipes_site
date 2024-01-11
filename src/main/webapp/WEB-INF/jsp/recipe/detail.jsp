@@ -6,7 +6,17 @@
     <div class="container">
         <div class="row justify-content-between gy-5 " >
             <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-start align-items-start align-items-lg-start "  >
-                <h2 >${recipe.name}</h2>
+                <h2>
+                    <sec:authorize access="isAuthenticated()">
+                        <c:if test="${bookmark != null}">
+                            <i class="fa-bookmark fa" aria-hidden="true"  onclick="setBookmark(${recipe.id})" id="bookmark${recipe.id}" style="font-size:48px;"></i>
+                        </c:if>
+                        <c:if test="${bookmark == null}">
+                            <i class="fa-bookmark-o fa" aria-hidden="true"  onclick="setBookmark(${recipe.id})" id="bookmark${recipe.id}" style="font-size:48px;"></i>
+                        </c:if>
+                    </sec:authorize>
+                    ${recipe.name}
+                </h2>
                 <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
                     <a href="/recipe/category?c=${recipe.category}"
                        class="btn-book-a-table">Catefory: ${recipe.category} </a>
@@ -49,7 +59,9 @@
                 <a href="/recipe/delete/?id=${recipe.id}">
                     <button type="button" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
                 </a>
+                <a href='/recipe/edit/${recipe.id}' class='btn btn-secondary'>Edit</a>
             </sec:authorize>
+
         </div>
     </div>
 </section>

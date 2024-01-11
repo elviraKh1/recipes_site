@@ -31,14 +31,15 @@
 
 
         <c:if test="${not empty ingredients}">
-            <h6 class="pt-3" style="color: #49beb7">ingredients found ${ingredients.getTotalElements()} </h6>
+            <h6 class="pt-3" style="color: #49beb7">Ingredients found ${ingredients.getTotalElements()} </h6>
             <table class='table  table-striped table-hover'>
                 <c:forEach items="${ingredients.getContent()}" var="ingredient">
                     <tr>
-                        <td><a href="/recipe/searchByIng?ingredientid=${ingredient.id}">${ingredient.name}</a></td>
+                        <td>${ingredient.name}</td>
                         <sec:authorize access="hasAnyAuthority('ADMIN')">
                             <td><a href="/ingredient/edit/${ingredient.id}">Edit</a></td>
                         </sec:authorize>
+                        <td><a href="/recipe/searchByIng?ingredientid=${ingredient.id}">Recipes</a></td>
                     </tr>
                 </c:forEach>
             </table>

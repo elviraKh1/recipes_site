@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,5 +31,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<BookmarkRecipe> bookmarkRecipe;
 }
 

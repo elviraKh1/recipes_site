@@ -28,12 +28,6 @@ function addFields() {
     hiddenIdInput.id = 'ingredientId_' + currentField;
     hiddenIdInput.name = 'ingredientsInp[' + currentField + '].id'
 
-    // quantity
-    // let quantityInput = document.createElement('input');
-    // quantityInput.type = 'number';
-    // quantityInput.name = 'quantity_'+currentFileld;
-    // quantityInput.placeholder = 'Ingredient quantity';
-
     // measure
     let measureInput = document.createElement('input');
     measureInput.type = 'text';
@@ -52,7 +46,6 @@ function addFields() {
 
     fieldDiv.appendChild(nameInput);
     fieldDiv.appendChild(hiddenIdInput);
-    // fieldDiv.appendChild(quantityInput);
     fieldDiv.appendChild(measureInput);
     fieldDiv.appendChild(remove);
     formFields.appendChild(fieldDiv);

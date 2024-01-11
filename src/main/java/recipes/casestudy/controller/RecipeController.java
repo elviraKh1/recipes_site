@@ -11,18 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import recipes.casestudy.database.dao.BookmarkRecipeDAO;
 import recipes.casestudy.database.dao.IngredientDAO;
 import recipes.casestudy.database.dao.RecipeDAO;
 import recipes.casestudy.database.dao.RecipeIngredientDAO;
-import recipes.casestudy.database.entity.Ingredient;
-import recipes.casestudy.database.entity.Recipe;
-import recipes.casestudy.database.entity.RecipeIngredient;
-import recipes.casestudy.database.entity.User;
+import recipes.casestudy.database.entity.*;
 import recipes.casestudy.formbean.RecipeFormBean;
 import recipes.casestudy.formbean.RecipeIngredientFormBean;
 import recipes.casestudy.sequirity.AuthenticatedUserService;
@@ -49,6 +44,9 @@ public class RecipeController {
 
     @Autowired
     private AuthenticatedUserService authenticatedUserService;
+
+    @Autowired
+    private BookmarkRecipeDAO bookmarkRecipeDAO;
 
     @GetMapping("/recipe/add")
     public ModelAndView createRecipe() {
@@ -137,6 +135,9 @@ public class RecipeController {
         log.info("######################### In /recipe /show with id " + id + " #########################");
 
         Recipe recipe = recipeDAO.findById(id);
+        User user = authenticatedUserService.loadCurrentUser();
+        BookmarkRecipe bookmarkRecipe = bookmarkRecipeDAO.getBookmarkRecipeByRecipeAndUser(recipe,user);
+        response.addObject("bookmark", bookmarkRecipe);
 
         List<RecipeIngredient> ingredients = recipeIngredientDAO.getRecipeIngredientByRecipe(recipe);
         if (id == null) {
@@ -144,7 +145,7 @@ public class RecipeController {
             response.setViewName("redirect:/error/404");
             return response;
         }
-        User user = authenticatedUserService.loadCurrentUser();
+
         response.addObject("ingredients", ingredients);
         response.addObject("recipe", recipe);
         response.addObject("user", user);
@@ -162,6 +163,27 @@ public class RecipeController {
 
         response.addObject("user", user);
         response.setViewName("redirect:/?success=Recipe delete Successfully");
+        return response;
+    }
+
+    @Transactional
+    @PostMapping("recipe/ny/delete/")
+    public ModelAndView deleteRecipes(@RequestParam List<Integer> id) {
+        ModelAndView response = new ModelAndView("recipe/ny");
+        log.info("######################### In /recipe / delete with id " + id + " #########################");
+
+        User user = authenticatedUserService.loadCurrentUser();
+        try {
+            for (Integer recipeId : id) {
+                recipeService.deleteById(recipeId);
+            }
+            response.setViewName("redirect:/recipe/ny?success=Recipe delete Successfully");
+        }catch (Exception e) {
+            log.info("Recipes isnt deleted "+ e.getMessage());
+            response.setViewName("redirect:/recipe/ny?success=Recipes arent deleted ");
+        }
+
+        response.addObject("user", user);
         return response;
     }
 
@@ -224,6 +246,21 @@ public class RecipeController {
         return response;
     }
 
+    @GetMapping("/recipe/mybookmarked")
+    public ModelAndView myBookmarkedRecipes(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                     @RequestParam(defaultValue = "6", required = false) Integer size) {
+        ModelAndView response = new ModelAndView("recipe/ny");
+        Page<Recipe> recipes;
+        Pageable paging = PageRequest.of(page, size);
+
+        User user = authenticatedUserService.loadCurrentUser();
+        recipes = recipeDAO.findByBookmarkRecipeAAndUser(user.getId(), paging);
+
+        response.addObject("user", user);
+        response.addObject("bookmark", 1);
+        response.addObject("recipes", recipes);
+        return response;
+    }
 
     @GetMapping("/recipe/category")
     public ModelAndView searchRecipeByCategory(@RequestParam(required = false) String c,
@@ -236,11 +273,11 @@ public class RecipeController {
         String category = c;
         if (!StringUtils.isEmpty(c)) {
             recipes = recipeDAO.findByCategoryIgnoreCase(c.trim(), paging);
-            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findByText " + recipes.toString());
+            log.debug("+++++++++++++++++++++ findByText " + recipes.toString());
         } else {
             recipes = recipeDAO.findAll(paging);
             category = "";
-            log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++ findAll" + recipes.toString());
+            log.debug("++++++++++++++++++++++ findAll" + recipes.toString());
         }
 
         User user = authenticatedUserService.loadCurrentUser();
@@ -265,6 +302,38 @@ public class RecipeController {
 
         response.addObject("recipes", recipes);
         return response;
+    }
+
+    @GetMapping(value = {"/recipe/bookmark"})
+    @ResponseBody
+    public String bookmarkRecipe (@RequestParam(required = true) Integer recipeId) {
+        boolean bookmark = false;
+        try {
+            User user = authenticatedUserService.loadCurrentUser();
+            Recipe recipe = recipeDAO.findById(recipeId);
+            BookmarkRecipe bookmarkRecipe = bookmarkRecipeDAO.getBookmarkRecipeByRecipeAndUser(recipe, user);
+            if (bookmarkRecipe==null){
+                bookmarkRecipe = new BookmarkRecipe();
+                bookmarkRecipe.setUser(user);
+                bookmarkRecipe.setRecipe(recipe);
+                bookmarkRecipeDAO.save(bookmarkRecipe);
+                bookmark = true;
+                log.info("recipe "+ recipeId +" is bookmarked");
+            }else{
+                bookmarkRecipeDAO.deleteById(bookmarkRecipe.getId());
+                log.info("recipe "+ recipeId +" bookmark is deleted");
+            }
+        }catch (Exception ex){
+            log.error("recipe "+ recipeId +" bookmark ERROR is happened "+ex.getMessage());
+        }
+
+        String json = "{\"recipe\": "
+                    +    "{"
+                    +       "\"recipeId\": "+recipeId+","
+                    +       "\"bookmark\": "+bookmark
+                    +    "}"
+                    +  "}";
+        return json;
     }
 
 
