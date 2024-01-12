@@ -8,17 +8,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class MultipartFileSizeValidator implements ConstraintValidator<MultipartFileSizeValidation, MultipartFile> {
 
-    private static final String ERROR_MESSAGE = "File too Large. The field imageFile exceeds its maximum permitted size of 1048576 bytes";
+    private int fileSize;
 
-    private static final int FILE_SIZE = 1048576;
 
     @Override
     public void initialize(MultipartFileSizeValidation inputFile) {
+        this.fileSize = inputFile.fileSize();
     }
 
     @Override
     public boolean isValid(MultipartFile inputFile, ConstraintValidatorContext context) {
-        context.buildConstraintViolationWithTemplate(ERROR_MESSAGE).addConstraintViolation();
-        return inputFile.getSize() < FILE_SIZE;
+        return inputFile.getSize() < fileSize;
     }
 }

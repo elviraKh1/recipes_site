@@ -15,9 +15,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = MultipartFileSizeValidator.class)
 public @interface MultipartFileSizeValidation {
 
-    public String message() default "File too Large.";
+    String message() default "File too Large.";
 
-    public Class<?>[] groups() default {};
+    int fileSize() default 1048576;
 
-    public Class<? extends Payload>[] payload() default {};
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

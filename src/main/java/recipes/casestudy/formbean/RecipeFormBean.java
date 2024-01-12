@@ -26,7 +26,7 @@ public class RecipeFormBean {
 
     private String imageUrl;
 
-    @MultipartFileSizeValidation
+    @MultipartFileSizeValidation(fileSize = 300050, message = "File too Large. The field imageFile exceeds its maximum permitted size of 300050 bytes")
     private MultipartFile imageFile;
 
     private List<RecipeIngredientFormBean> ingredientsInp;
