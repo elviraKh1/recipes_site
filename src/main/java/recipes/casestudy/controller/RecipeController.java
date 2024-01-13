@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -159,6 +160,9 @@ public class RecipeController {
         log.info("######################### In /recipe / delete with id " + id + " #########################");
 
         User user = authenticatedUserService.loadCurrentUser();
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
         recipeService.deleteById(id);
 
         response.addObject("user", user);
@@ -173,6 +177,9 @@ public class RecipeController {
         log.info("######################### In /recipe / delete with id " + id + " #########################");
 
         User user = authenticatedUserService.loadCurrentUser();
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
         try {
             for (Integer recipeId : id) {
                 recipeService.deleteById(recipeId);
@@ -238,6 +245,11 @@ public class RecipeController {
         Pageable paging = PageRequest.of(page, size);
 
         User user = authenticatedUserService.loadCurrentUser();
+
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
+
         recipes = recipeDAO.findByAuthorId(user.getId(), paging);
 
         response.addObject("user", user);
@@ -254,6 +266,11 @@ public class RecipeController {
         Pageable paging = PageRequest.of(page, size);
 
         User user = authenticatedUserService.loadCurrentUser();
+
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
+
         recipes = recipeDAO.findByBookmarkRecipeAAndUser(user.getId(), paging);
 
         response.addObject("user", user);
@@ -310,6 +327,10 @@ public class RecipeController {
         boolean bookmark = false;
         try {
             User user = authenticatedUserService.loadCurrentUser();
+            if (user == null) {
+                throw new SessionAuthenticationException("Authorized user not found. Session expired");
+            }
+
             Recipe recipe = recipeDAO.findById(recipeId);
             BookmarkRecipe bookmarkRecipe = bookmarkRecipeDAO.getBookmarkRecipeByRecipeAndUser(recipe, user);
             if (bookmarkRecipe==null){

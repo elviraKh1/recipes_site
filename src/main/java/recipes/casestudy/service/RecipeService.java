@@ -3,6 +3,7 @@ package recipes.casestudy.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import recipes.casestudy.database.dao.IngredientDAO;
@@ -49,6 +50,9 @@ public class RecipeService {
             recipe = new Recipe();
         }
         User user = authenticatedUserService.loadCurrentUser();
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
 
         recipe.setName(form.getName());
         recipe.setCategory(form.getCategory());
@@ -70,7 +74,7 @@ public class RecipeService {
     private Recipe saveImage(MultipartFile imageFile, Recipe recipe) {
         if (imageFile.isEmpty())
             return recipe;
-        String filename = System.currentTimeMillis()+imageFile.getOriginalFilename();
+        String filename = System.currentTimeMillis() + imageFile.getOriginalFilename();
         File f = new File("./src/main/webapp/pub/images/" + filename);
         try (OutputStream outputStream = new FileOutputStream(f.getAbsolutePath())) {
             IOUtils.copy(imageFile.getInputStream(), outputStream);

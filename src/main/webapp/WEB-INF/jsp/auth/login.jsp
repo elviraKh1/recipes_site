@@ -19,7 +19,13 @@
                 </div>
             </div>
         </c:if>
-
+        <c:if test="${param['m'] != null}">
+            <div class="row justify-content-center">
+                <div class="col-5 pb-15 alert alert-danger">
+                        ${param['m']}
+                </div>
+            </div>
+        </c:if>
 
         <div class="row justify-content-center">
             <div class="col-5 pb-15  " style="background-color: #f1f1f1;">
