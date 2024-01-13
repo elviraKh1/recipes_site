@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
 import recipes.casestudy.database.dao.UserDAO;
@@ -57,6 +58,14 @@ public class AuthenticatedUserService {
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(result);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+    }
+
+    public User checkAuthCurrentUser() {
+        User user = loadCurrentUser();
+        if (user == null) {
+            throw new SessionAuthenticationException("Authorized user not found. Session expired");
+        }
+        return user;
     }
 
 

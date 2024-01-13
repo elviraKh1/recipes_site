@@ -3,7 +3,6 @@ package recipes.casestudy.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import recipes.casestudy.database.dao.IngredientDAO;
@@ -49,10 +48,7 @@ public class RecipeService {
         if (recipe == null) {
             recipe = new Recipe();
         }
-        User user = authenticatedUserService.loadCurrentUser();
-        if (user == null) {
-            throw new SessionAuthenticationException("Authorized user not found. Session expired");
-        }
+        User user = authenticatedUserService.checkAuthCurrentUser();
 
         recipe.setName(form.getName());
         recipe.setCategory(form.getCategory());
